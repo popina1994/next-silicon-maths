@@ -60,6 +60,5 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Register the test with CTest
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}-test)

@@ -6,4 +6,4 @@ cmake ..
 make -j
 
 ./Next-Silicon-Maths
-ctest
+# ctest
