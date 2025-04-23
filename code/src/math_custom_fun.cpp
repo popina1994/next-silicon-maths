@@ -9,7 +9,7 @@ namespace NextSilicon
         static constexpr auto PI_F = std::numbers::pi_v<float>;
         static constexpr auto TWO_PI_F = 2 * PI_F;
         static constexpr auto TAYLOR_DEGREE_START = 3;
-        static constexpr auto TAYLOR_DEGREE_NEXT_INC = 3;
+        static constexpr auto TAYLOR_DEGREE_NEXT_INC = 2;
 
         auto xPiRange = fmodf(x, TWO_PI_F);
 
