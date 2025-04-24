@@ -7,8 +7,15 @@ set(CMAKE_CXX_STANDARD 23)
 
 find_package(BLAS REQUIRED)
 find_package(MKL REQUIRED)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Boost REQUIRED COMPONENTS system thread iostreams program_options)
+
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 
 enable_testing()
 
@@ -32,18 +39,16 @@ else()
     set(MEMORY_USAGE "1")
 endif()
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/code/main.cpp ${CPP_SOURCES} ${C_SOURCES})
+add_library(${PROJECT_NAME}-c_lib STATIC ${C_SOURCES})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/code/main.cpp ${CPP_SOURCES})
 add_executable(${PROJECT_NAME}-test ${CPP_SOURCES} ${C_SOURCES} ${TEST_SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${MKL_INCLUDE_DIRS} code/header)
-target_include_directories(${PROJECT_NAME}-test PRIVATE ${MKL_INCLUDE_DIRS} code/header test/header)
+target_include_directories(${PROJECT_NAME}-c_lib PRIVATE  code/header)
+target_include_directories(${PROJECT_NAME} PRIVATE ${MKL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} code/header)
+target_include_directories(${PROJECT_NAME}-test PRIVATE ${MKL_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} code/header test/header)
 
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-
-find_package(Boost REQUIRED COMPONENTS system thread iostreams program_options)
-include_directories(${Boost_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-c_lib)
+target_link_libraries(${PROJECT_NAME}-test PRIVATE ${PROJECT_NAME}-c_lib)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${MKL_LIBRARIES} ${BLAS_LIBRARIES}
     ${Boost_LIBRARIES}

@@ -1,9 +1,17 @@
 #include <cmath>
 #include <numbers>
 #include "math_custom_fun.h"
-
+extern "C" {
+#include "fp32_custom_sine.h"
+}
 namespace NextSilicon
 {
+    enum class FunctionVersion
+    {
+        TAYLOR_C_ORIGINAL,
+        TAYLOR_CPP_OPTIMIZED,
+    };
+
     float nextSiliconSineFP32(float x, int taylorDegreeEnd)
     {
         static constexpr auto PI_F = std::numbers::pi_v<float>;
@@ -34,6 +42,23 @@ namespace NextSilicon
         }
 
         return result;
+    }
+
+    float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion)
+    {
+        auto sineVal = std::nanf("");
+        switch(functionVersion)
+        {
+            case FunctionVersion::TAYLOR_C_ORIGINAL:
+                sineVal = fp32_custom_sine(x);
+                break;
+            case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
+                sineVal = nextSiliconSineFP32(x, functionVersion);
+                break;
+
+        }
+
+        return sineVal;
     }
 
 }
