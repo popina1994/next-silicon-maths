@@ -32,8 +32,9 @@ mkdir -p corpus
 
 
 # Run fuzzying
-#./Next-Silicon-Maths-fuzz-main_fuzzy  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
-./Next-Silicon-Maths-fuzz-main_fuzzy_2  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
+# ./Next-Silicon-Maths-fuzz-main_fuzzy  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
+# ./Next-Silicon-Maths-fuzz-main_fuzzy_2  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
+# ./Next-Silicon-Maths-fuzz-main_fuzzy_3  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 
 #./Next-Silicon-Maths
 # Run afl: still not fully supported

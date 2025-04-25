@@ -153,15 +153,12 @@ namespace NextSilicon
         {
             return 0;
         }
-        std::cout << x << std::endl;
         auto xPiRange = fmodf(x, TWO_PI_F);
 
-        std::cout << xPiRange << std::endl;
         if (std::abs(x) > PI_F)
         {
             xPiRange -=  std::signbit(x) * TWO_PI_F;
         }
-        std::cout << xPiRange << std::endl;
 
         auto b = PI_F + 0.001;
         auto a = -PI_F - 0.001;

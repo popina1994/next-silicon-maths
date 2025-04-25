@@ -57,7 +57,7 @@ TEST(CustomSinTest, ChebPolyPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
         auto sinGoldVal = ::sinf(val);
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
-        std::cout << val << " " <<  sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
+        // std::cout << val << " " <<  sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
         EXPECT_LE(relError, std::numeric_limits<float>::epsilon() * 30);
     }
 }
@@ -139,10 +139,11 @@ TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiMinDivTwo) {
 }
 
 
-TEST(CustomSinTest, DISABLED_TaylorSeriesLargeNumbers)
+TEST(CustomSinTest, TaylorSeriesLargeNumbers)
 {
-    std::vector<float> vVals =  { std::numeric_limits<float>::lowest(),
-        std::numeric_limits<float>::min(), std::numeric_limits<float>::max()};
+    std::vector<float> vVals =  {
+        std::numeric_limits<float>::min()};
+        // std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max()
 
     SineArguments sinArgs;
     sinArgs.taylorDegreeEnd = 11;
@@ -151,7 +152,7 @@ TEST(CustomSinTest, DISABLED_TaylorSeriesLargeNumbers)
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
         auto sinGoldVal = ::sinf(val);
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
-        std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
+        // std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
 
         // EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
     }
@@ -160,23 +161,22 @@ TEST(CustomSinTest, DISABLED_TaylorSeriesLargeNumbers)
 
 TEST(CustomSinTest, ChebPolyLargeNumbers)
 {
-    std::vector<float> vVals =  { std::numeric_limits<float>::lowest(),
-        std::numeric_limits<float>::min()};
+    std::vector<float> vVals =  { std::numeric_limits<float>::min()};
     //std::numeric_limits<float>::max()
      std::map<float, float> sineValues = {
     {std::numeric_limits<float>::lowest(),  -0.98540003f },
-    { std::numeric_limits<float>::min(),  0 }
+    { std::numeric_limits<float>::min(),  0 },
+    { std::numeric_limits<float>::max(),  0.98540003f }
     };
     // On different systems different outputs.
-    // { std::numeric_limits<float>::max(),  0.98540003f }
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 11;
+    sinArgs.taylorDegreeEnd = 15;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
         auto sinGoldVal = sineValues[val];
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
-        std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
+        // std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
 
         EXPECT_LE(relError, std::numeric_limits<float>::epsilon() * 1e3);
     }

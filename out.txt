@@ -1,148 +1,242 @@
- 
-:: initializing oneAPI environment ...
-   build.sh: BASH_VERSION = 5.1.16(1)-release
-   args: Using "$@" for oneapi-vars.sh arguments: 
-:: advisor -- processing etc/advisor/vars.sh
-:: ccl -- processing etc/ccl/vars.sh
-:: compiler -- processing etc/compiler/vars.sh
-:: dal -- processing etc/dal/vars.sh
-:: debugger -- processing etc/debugger/vars.sh
-:: dnnl -- processing etc/dnnl/vars.sh
-:: dpct -- processing etc/dpct/vars.sh
-:: dpl -- processing etc/dpl/vars.sh
-:: ipp -- processing etc/ipp/vars.sh
-:: ippcp -- processing etc/ippcp/vars.sh
-:: mkl -- processing etc/mkl/vars.sh
-:: mpi -- processing etc/mpi/vars.sh
-:: pti -- processing etc/pti/vars.sh
-:: tbb -- processing etc/tbb/vars.sh
-:: vtune -- processing etc/vtune/vars.sh
-:: oneAPI environment initialized ::
- 
 -- The CXX compiler identification is GNU 11.4.0
 -- The C compiler identification is GNU 11.4.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: /usr/bin/cc - skipped
+-- Check for working C compiler: /usr/bin/afl-gcc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Looking for sgemm_
--- Looking for sgemm_ - not found
--- Looking for pthread.h
--- Looking for pthread.h - found
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE  
--- Looking for sgemm_
--- Looking for sgemm_ - found
--- Found BLAS: /opt/intel/oneapi/2025.1/lib/libmkl_intel_lp64.so;/opt/intel/oneapi/2025.1/lib/libmkl_intel_thread.so;/opt/intel/oneapi/2025.1/lib/libmkl_core.so;/opt/intel/oneapi/2025.1/lib/libiomp5.so;-lm;-ldl  
--- MKL_VERSION: 2025.1.0
--- MKL_ROOT: /opt/intel/oneapi/2025.1
--- MKL_ARCH: intel64
--- MKL_LINK: None, set to ` dynamic` by default
--- MKL_INTERFACE_FULL: None, set to ` intel_ilp64` by default
--- MKL_THREADING: None, set to ` intel_thread` by default
--- MKL_MPI: None, set to ` intelmpi` by default
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_scalapack_ilp64.so
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_cdft_core.so
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_intel_ilp64.so
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_intel_thread.so
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_core.so
--- Found /opt/intel/oneapi/2025.1/lib/libmkl_blacs_intelmpi_ilp64.so
--- Found /opt/intel/oneapi/compiler/latest/lib/libiomp5.so
 -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system thread iostreams program_options 
+-- Found Threads: TRUE  
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/popina/code/cpp/next-silicon/maths/build
-[  5%] Building C object CMakeFiles/Next-Silicon-Maths-c_lib.dir/code/src/fp32_custom_sine.c.o
-[ 11%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
-[ 17%] Linking C static library libNext-Silicon-Maths-c_lib.a
-[ 17%] Built target Next-Silicon-Maths-c_lib
-[ 23%] Building CXX object CMakeFiles/Next-Silicon-Maths.dir/code/main.cpp.o
-[ 29%] Building CXX object CMakeFiles/Next-Silicon-Maths.dir/code/src/math_custom_fun.cpp.o
-[ 35%] Linking CXX executable Next-Silicon-Maths
-[ 35%] Built target Next-Silicon-Maths
-[ 41%] Linking CXX static library ../../../lib/libgtest.a
-[ 41%] Built target gtest
-[ 52%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
-[ 52%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
-[ 58%] Linking CXX static library ../../../lib/libgtest_main.a
-[ 58%] Built target gtest_main
-[ 76%] Building CXX object CMakeFiles/Next-Silicon-Maths-test.dir/test/src/tests.cpp.o
-[ 76%] Building C object CMakeFiles/Next-Silicon-Maths-test.dir/code/src/fp32_custom_sine.c.o
-[ 76%] Building CXX object CMakeFiles/Next-Silicon-Maths-test.dir/code/src/math_custom_fun.cpp.o
-[ 82%] Linking CXX executable Next-Silicon-Maths-test
-[ 82%] Built target Next-Silicon-Maths-test
-[ 88%] Linking CXX static library ../../../lib/libgmock.a
-[ 88%] Built target gmock
-[ 94%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+[ 10%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[ 10%] Building C object CMakeFiles/Next-Silicon-Maths-c_lib.dir/code/src/fp32_custom_sine.c.o
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 3 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[ 15%] Linking C static library libNext-Silicon-Maths-c_lib.a
+[ 15%] Built target Next-Silicon-Maths-c_lib
+[ 31%] Building CXX object CMakeFiles/Next-Silicon-Maths-afl.dir/test/main_fuzzy.cpp.o
+[ 31%] Building CXX object CMakeFiles/Next-Silicon-Maths.dir/code/src/math_custom_fun.cpp.o
+[ 31%] Building CXX object CMakeFiles/Next-Silicon-Maths-afl.dir/code/src/math_custom_fun.cpp.o
+[ 36%] Building CXX object CMakeFiles/Next-Silicon-Maths.dir/code/main.cpp.o
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 50 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 49 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 23 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[ 42%] Linking CXX executable Next-Silicon-Maths-afl
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 17 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[ 47%] Linking CXX executable Next-Silicon-Maths
+[ 47%] Built target Next-Silicon-Maths-afl
+[ 47%] Built target Next-Silicon-Maths
+[ 52%] Linking CXX static library ../../../lib/libgtest.a
+[ 52%] Built target gtest
+[ 63%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 63%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+[ 68%] Linking CXX static library ../../../lib/libgtest_main.a
+[ 68%] Built target gtest_main
+[ 78%] Building CXX object CMakeFiles/Next-Silicon-Maths-test.dir/code/src/math_custom_fun.cpp.o
+[ 78%] Building CXX object CMakeFiles/Next-Silicon-Maths-test.dir/test/src/tests.cpp.o
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 23 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[ 84%] Linking CXX static library ../../../lib/libgmock.a
+[ 84%] Built target gmock
+[ 89%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+[0;36mafl-as++4.00c[0m by Michal Zalewski
+[1;92m[+] [0mInstrumented 304 locations (64-bit, non-hardened mode, ratio 100%).[0m
+[ 94%] Linking CXX executable Next-Silicon-Maths-test
+[ 94%] Built target Next-Silicon-Maths-test
 [100%] Linking CXX static library ../../../lib/libgmock_main.a
 [100%] Built target gmock_main
+X IN range-3.141593e+00
 VAL: -3.141593e+00 SINVAL: 3.827466e-09 SINVAL CUSTOM: 8.742278e-08 8.359531e-08 9.562189e-01
+X IN range-3.041593e+00
 VAL: -3.041593e+00 SINVAL: -9.983338e-02 SINVAL CUSTOM: -9.983324e-02 1.415610e-07 -1.417975e-06
+X IN range-2.941593e+00
 VAL: -2.941593e+00 SINVAL: -1.986690e-01 SINVAL CUSTOM: -1.986691e-01 7.450581e-08 -3.750247e-07
+X IN range-2.841593e+00
 VAL: -2.841593e+00 SINVAL: -2.955198e-01 SINVAL CUSTOM: -2.955199e-01 5.960464e-08 -2.016942e-07
+X IN range-2.741593e+00
 VAL: -2.741593e+00 SINVAL: -3.894180e-01 SINVAL CUSTOM: -3.894179e-01 1.192093e-07 -3.061217e-07
+X IN range-2.641593e+00
 VAL: -2.641593e+00 SINVAL: -4.794250e-01 SINVAL CUSTOM: -4.794250e-01 2.980232e-08 -6.216263e-08
+X IN range-2.541593e+00
 VAL: -2.541593e+00 SINVAL: -5.646418e-01 SINVAL CUSTOM: -5.646420e-01 1.192093e-07 -2.111237e-07
+X IN range-2.441593e+00
 VAL: -2.441593e+00 SINVAL: -6.442171e-01 SINVAL CUSTOM: -6.442171e-01 5.960464e-08 -9.252260e-08
+X IN range-2.341594e+00
 VAL: -2.341594e+00 SINVAL: -7.173554e-01 SINVAL CUSTOM: -7.173555e-01 1.192093e-07 -1.661788e-07
+X IN range-2.241594e+00
 VAL: -2.241594e+00 SINVAL: -7.833264e-01 SINVAL CUSTOM: -7.833263e-01 5.960464e-08 -7.609172e-08
+X IN range-2.141594e+00
 VAL: -2.141594e+00 SINVAL: -8.414705e-01 SINVAL CUSTOM: -8.414704e-01 1.192093e-07 -1.416678e-07
+X IN range-2.041594e+00
 VAL: -2.041594e+00 SINVAL: -8.912068e-01 SINVAL CUSTOM: -8.912069e-01 5.960464e-08 -6.688082e-08
+X IN range-1.941594e+00
 VAL: -1.941594e+00 SINVAL: -9.320387e-01 SINVAL CUSTOM: -9.320387e-01 5.960464e-08 -6.395083e-08
+X IN range-1.841594e+00
 VAL: -1.841594e+00 SINVAL: -9.635579e-01 SINVAL CUSTOM: -9.635579e-01 0.000000e+00 -0.000000e+00
+X IN range-1.741594e+00
 VAL: -1.741594e+00 SINVAL: -9.854496e-01 SINVAL CUSTOM: -9.854496e-01 0.000000e+00 -0.000000e+00
+X IN range-1.641594e+00
 VAL: -1.641594e+00 SINVAL: -9.974950e-01 SINVAL CUSTOM: -9.974949e-01 5.960464e-08 -5.975433e-08
+X IN range-1.541594e+00
 VAL: -1.541594e+00 SINVAL: -9.995735e-01 SINVAL CUSTOM: -9.995736e-01 1.192093e-07 -1.192601e-07
+X IN range-1.441594e+00
 VAL: -1.441594e+00 SINVAL: -9.916649e-01 SINVAL CUSTOM: -9.916649e-01 0.000000e+00 -0.000000e+00
+X IN range-1.341594e+00
 VAL: -1.341594e+00 SINVAL: -9.738477e-01 SINVAL CUSTOM: -9.738479e-01 1.192093e-07 -1.224106e-07
+X IN range-1.241594e+00
 VAL: -1.241594e+00 SINVAL: -9.463003e-01 SINVAL CUSTOM: -9.463004e-01 5.960464e-08 -6.298702e-08
+X IN range-1.141594e+00
 VAL: -1.141594e+00 SINVAL: -9.092978e-01 SINVAL CUSTOM: -9.092978e-01 0.000000e+00 -0.000000e+00
+X IN range-1.041594e+00
 VAL: -1.041594e+00 SINVAL: -8.632098e-01 SINVAL CUSTOM: -8.632098e-01 0.000000e+00 -0.000000e+00
+X IN range-9.415935e-01
 VAL: -9.415935e-01 SINVAL: -8.084970e-01 SINVAL CUSTOM: -8.084969e-01 5.960464e-08 -7.372279e-08
+X IN range-8.415935e-01
 VAL: -8.415935e-01 SINVAL: -7.457058e-01 SINVAL CUSTOM: -7.457058e-01 5.960464e-08 -7.993051e-08
+X IN range-7.415935e-01
 VAL: -7.415935e-01 SINVAL: -6.754637e-01 SINVAL CUSTOM: -6.754638e-01 5.960464e-08 -8.824254e-08
+X IN range-6.415935e-01
 VAL: -6.415935e-01 SINVAL: -5.984728e-01 SINVAL CUSTOM: -5.984728e-01 5.960464e-08 -9.959458e-08
+X IN range-5.415934e-01
 VAL: -5.415934e-01 SINVAL: -5.155021e-01 SINVAL CUSTOM: -5.155020e-01 5.960464e-08 -1.156245e-07
+X IN range-4.415934e-01
 VAL: -4.415934e-01 SINVAL: -4.273806e-01 SINVAL CUSTOM: -4.273806e-01 2.980232e-08 -6.973251e-08
+X IN range-3.415934e-01
 VAL: -3.415934e-01 SINVAL: -3.349889e-01 SINVAL CUSTOM: -3.349889e-01 0.000000e+00 -0.000000e+00
+X IN range-2.415935e-01
 VAL: -2.415935e-01 SINVAL: -2.392501e-01 SINVAL CUSTOM: -2.392501e-01 1.490116e-08 -6.228278e-08
+X IN range-1.415935e-01
 VAL: -1.415935e-01 SINVAL: -1.411208e-01 SINVAL CUSTOM: -1.411208e-01 0.000000e+00 -0.000000e+00
+X IN range-4.159345e-02
 VAL: -4.159345e-02 SINVAL: -4.158146e-02 SINVAL CUSTOM: -4.158146e-02 0.000000e+00 -0.000000e+00
+X IN range5.840655e-02
 VAL: 5.840655e-02 SINVAL: 5.837335e-02 SINVAL CUSTOM: 5.837335e-02 0.000000e+00 0.000000e+00
+X IN range1.584066e-01
 VAL: 1.584066e-01 SINVAL: 1.577449e-01 SINVAL CUSTOM: 1.577449e-01 0.000000e+00 0.000000e+00
+X IN range2.584065e-01
 VAL: 2.584065e-01 SINVAL: 2.555403e-01 SINVAL CUSTOM: 2.555403e-01 2.980232e-08 1.166247e-07
+X IN range3.584065e-01
 VAL: 3.584065e-01 SINVAL: 3.507825e-01 SINVAL CUSTOM: 3.507825e-01 0.000000e+00 0.000000e+00
+X IN range4.584065e-01
 VAL: 4.584065e-01 SINVAL: 4.425197e-01 SINVAL CUSTOM: 4.425197e-01 0.000000e+00 0.000000e+00
+X IN range5.584065e-01
 VAL: 5.584065e-01 SINVAL: 5.298355e-01 SINVAL CUSTOM: 5.298355e-01 0.000000e+00 0.000000e+00
+X IN range6.584066e-01
 VAL: 6.584066e-01 SINVAL: 6.118572e-01 SINVAL CUSTOM: 6.118573e-01 5.960464e-08 9.741593e-08
+X IN range7.584066e-01
 VAL: 7.584066e-01 SINVAL: 6.877657e-01 SINVAL CUSTOM: 6.877656e-01 5.960464e-08 8.666419e-08
+X IN range8.584066e-01
 VAL: 8.584066e-01 SINVAL: 7.568020e-01 SINVAL CUSTOM: 7.568020e-01 0.000000e+00 0.000000e+00
+X IN range9.584066e-01
 VAL: 9.584066e-01 SINVAL: 8.182767e-01 SINVAL CUSTOM: 8.182767e-01 0.000000e+00 0.000000e+00
+X IN range1.058407e+00
 VAL: 1.058407e+00 SINVAL: 8.715754e-01 SINVAL CUSTOM: 8.715754e-01 5.960464e-08 6.838725e-08
+X IN range1.158407e+00
 VAL: 1.158407e+00 SINVAL: 9.161657e-01 SINVAL CUSTOM: 9.161656e-01 5.960464e-08 6.505881e-08
+X IN range1.258407e+00
 VAL: 1.258407e+00 SINVAL: 9.516018e-01 SINVAL CUSTOM: 9.516019e-01 5.960464e-08 6.263612e-08
+X IN range1.358407e+00
 VAL: 1.358407e+00 SINVAL: 9.775299e-01 SINVAL CUSTOM: 9.775300e-01 5.960464e-08 6.097475e-08
+X IN range1.458407e+00
 VAL: 1.458407e+00 SINVAL: 9.936910e-01 SINVAL CUSTOM: 9.936909e-01 5.960464e-08 5.998309e-08
+X IN range1.558407e+00
 VAL: 1.558407e+00 SINVAL: 9.999233e-01 SINVAL CUSTOM: 9.999232e-01 1.192093e-07 1.192184e-07
+X IN range1.658407e+00
 VAL: 1.658407e+00 SINVAL: 9.961647e-01 SINVAL CUSTOM: 9.961647e-01 0.000000e+00 0.000000e+00
+X IN range1.758407e+00
 VAL: 1.758407e+00 SINVAL: 9.824528e-01 SINVAL CUSTOM: 9.824528e-01 0.000000e+00 0.000000e+00
+X IN range1.858407e+00
 VAL: 1.858407e+00 SINVAL: 9.589244e-01 SINVAL CUSTOM: 9.589244e-01 0.000000e+00 0.000000e+00
+X IN range1.958407e+00
 VAL: 1.958407e+00 SINVAL: 9.258150e-01 SINVAL CUSTOM: 9.258149e-01 1.192093e-07 1.287615e-07
+X IN range2.058407e+00
 VAL: 2.058407e+00 SINVAL: 8.834550e-01 SINVAL CUSTOM: 8.834549e-01 5.960464e-08 6.746767e-08
+X IN range2.158407e+00
 VAL: 2.158407e+00 SINVAL: 8.322678e-01 SINVAL CUSTOM: 8.322678e-01 5.960464e-08 7.161715e-08
+X IN range2.258407e+00
 VAL: 2.258407e+00 SINVAL: 7.727649e-01 SINVAL CUSTOM: 7.727649e-01 0.000000e+00 0.000000e+00
+X IN range2.358407e+00
 VAL: 2.358407e+00 SINVAL: 7.055410e-01 SINVAL CUSTOM: 7.055409e-01 5.960464e-08 8.448078e-08
+X IN range2.458406e+00
 VAL: 2.458406e+00 SINVAL: 6.312675e-01 SINVAL CUSTOM: 6.312673e-01 1.788139e-07 2.832618e-07
+X IN range2.558406e+00
 VAL: 2.558406e+00 SINVAL: 5.506863e-01 SINVAL CUSTOM: 5.506864e-01 5.960464e-08 1.082370e-07
+X IN range2.658406e+00
 VAL: 2.658406e+00 SINVAL: 4.646032e-01 SINVAL CUSTOM: 4.646032e-01 0.000000e+00 0.000000e+00
+X IN range2.758406e+00
 VAL: 2.758406e+00 SINVAL: 3.738777e-01 SINVAL CUSTOM: 3.738778e-01 5.960464e-08 1.594228e-07
+X IN range2.858406e+00
 VAL: 2.858406e+00 SINVAL: 2.794167e-01 SINVAL CUSTOM: 2.794167e-01 2.980232e-08 1.066590e-07
+X IN range2.958406e+00
 VAL: 2.958406e+00 SINVAL: 1.821637e-01 SINVAL CUSTOM: 1.821638e-01 1.639128e-07 8.998095e-07
+X IN range3.058406e+00
 VAL: 3.058406e+00 SINVAL: 8.309100e-02 SINVAL CUSTOM: 8.309087e-02 1.266599e-07 1.524354e-06
+X IN range1.994001e+00
+VAL: 3.141593e+14 SINVAL: 9.117774e-01 SINVAL CUSTOM: 4.805185e-01 4.312589e-01 8.974866e-01
+X IN range1.055768e+00
+VAL: 4.141593e+14 SINVAL: 8.702790e-01 SINVAL CUSTOM: -7.704827e-01 1.640762e+00 -2.129524e+00
+X IN range1.175356e-01
+VAL: 5.141593e+14 SINVAL: 1.172652e-01 SINVAL CUSTOM: -7.714716e-01 8.887368e-01 -1.152002e+00
+X IN range5.462488e+00
+VAL: 6.141593e+14 SINVAL: -7.316232e-01 SINVAL CUSTOM: 4.791561e-01 1.210779e+00 2.526900e+00
+X IN range4.524255e+00
+VAL: 7.141592e+14 SINVAL: -9.823543e-01 SINVAL CUSTOM: 9.524127e-01 1.934767e+00 2.031438e+00
+X IN range3.586022e+00
+VAL: 8.141592e+14 SINVAL: -4.299431e-01 SINVAL CUSTOM: -1.195018e-01 3.104413e-01 -2.597795e+00
+X IN range2.647789e+00
+VAL: 9.141592e+14 SINVAL: 4.739781e-01 SINVAL CUSTOM: -9.975395e-01 1.471518e+00 -1.475147e+00
+X IN range1.709557e+00
+VAL: 1.014159e+15 SINVAL: 9.903882e-01 SINVAL CUSTOM: -2.571935e-01 1.247582e+00 -4.850752e+00
+X IN range7.713237e-01
+VAL: 1.114159e+15 SINVAL: 6.970848e-01 SINVAL CUSTOM: 9.004170e-01 2.033321e-01 2.258200e-01
+X IN range6.116276e+00
+VAL: 1.214159e+15 SINVAL: -1.661355e-01 SINVAL CUSTOM: 5.972129e-01 7.633485e-01 1.278185e+00
+X IN range5.178043e+00
+VAL: 1.314159e+15 SINVAL: -8.935277e-01 SINVAL CUSTOM: -6.748948e-01 2.186329e-01 -3.239512e-01
+X IN range4.239810e+00
+VAL: 1.414159e+15 SINVAL: -8.903981e-01 SINVAL CUSTOM: -8.520697e-01 3.832847e-02 -4.498279e-02
+X IN range3.301578e+00
+VAL: 1.514159e+15 SINVAL: -1.593033e-01 SINVAL CUSTOM: 3.531324e-01 5.124357e-01 1.451115e+00
+X IN range2.363345e+00
+VAL: 1.614159e+15 SINVAL: 7.020328e-01 SINVAL CUSTOM: 9.854211e-01 2.833883e-01 2.875809e-01
+X IN range1.425112e+00
+VAL: 1.714159e+15 SINVAL: 9.894067e-01 SINVAL CUSTOM: 1.898672e-02 9.704200e-01 5.111046e+01
+X IN range4.868789e-01
+VAL: 1.814159e+15 SINVAL: 4.678697e-01 SINVAL CUSTOM: -9.782513e-01 1.446121e+00 -1.478271e+00
+X IN range5.831831e+00
+VAL: 1.914159e+15 SINVAL: -4.361851e-01 SINVAL CUSTOM: -3.883983e-01 4.778677e-02 -1.230355e-01
+X IN range4.893599e+00
+VAL: 2.014159e+15 SINVAL: -9.836266e-01 SINVAL CUSTOM: 8.315825e-01 1.815209e+00 2.182837e+00
+X IN range3.955366e+00
+VAL: 2.114159e+15 SINVAL: -7.268836e-01 SINVAL CUSTOM: 7.024242e-01 1.429308e+00 2.034822e+00
+X IN range3.017133e+00
+VAL: 2.214159e+15 SINVAL: 1.241386e-01 SINVAL CUSTOM: -5.663300e-01 6.904686e-01 -1.219198e+00
+X IN range3.758571e+00
+VAL: 2.314159e+15 SINVAL: -5.785734e-01 SINVAL CUSTOM: -2.860836e-01 2.924898e-01 -1.022393e+00
+X IN range2.820338e+00
+VAL: 2.414159e+15 SINVAL: 3.157569e-01 SINVAL CUSTOM: 8.869535e-01 5.711967e-01 6.439984e-01
+X IN range1.882105e+00
+VAL: 2.514159e+15 SINVAL: 9.519334e-01 SINVAL CUSTOM: 6.210189e-01 3.309145e-01 5.328574e-01
+X IN range9.438725e-01
+VAL: 2.614159e+15 SINVAL: 8.098359e-01 SINVAL CUSTOM: -6.524416e-01 1.462278e+00 -2.241239e+00
+X IN range5.639553e-03
+VAL: 2.714159e+15 SINVAL: 5.639523e-03 SINVAL CUSTOM: -8.673968e-01 8.730364e-01 -1.006502e+00
+X IN range5.350592e+00
+VAL: 2.814159e+15 SINVAL: -8.031670e-01 SINVAL CUSTOM: 3.248914e-01 1.128058e+00 3.472110e+00
+X IN range4.412359e+00
+VAL: 2.914159e+15 SINVAL: -9.553277e-01 SINVAL CUSTOM: 9.900838e-01 1.945411e+00 1.964896e+00
+X IN range3.474126e+00
+VAL: 3.014159e+15 SINVAL: -3.264388e-01 SINVAL CUSTOM: 4.898848e-02 3.754273e-01 7.663583e+00
+X IN range2.535893e+00
+VAL: 3.114159e+15 SINVAL: 5.693370e-01 SINVAL CUSTOM: -9.715845e-01 1.540921e+00 -1.585988e+00
