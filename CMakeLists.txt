@@ -5,6 +5,8 @@ project(Next-Silicon-Maths LANGUAGES CXX C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_CXX_STANDARD 23)
 
+add_compile_options(-Wall -Wextra -Wshadow -Wconversion -Wuninitialized -Wmissing-declarations -Wsign-compare)
+
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)

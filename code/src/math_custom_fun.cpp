@@ -9,12 +9,16 @@ extern "C" {
 namespace NextSilicon
 {
 
-    float nextSiliconSineFP32(float x, int taylorDegreeEnd)
+    float nextSiliconSineFP32(float x, uint32_t taylorDegreeEnd)
     {
         static constexpr auto PI_F = std::numbers::pi_v<float>;
         static constexpr auto TWO_PI_F = 2 * PI_F;
-        static constexpr auto TAYLOR_DEGREE_START = 3;
-        static constexpr auto TAYLOR_DEGREE_NEXT_INC = 2;
+        static constexpr auto TAYLOR_DEGREE_START = 3u;
+        static constexpr auto TAYLOR_DEGREE_NEXT_INC = 2u;
+        if (std::isnan(x))
+        {
+            throw SinNaN();
+        }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
         std::cout << "X IN range" << xPiRange << std::endl;
@@ -52,7 +56,7 @@ namespace NextSilicon
                 sineVal = fp32_custom_sine(x);
                 break;
             case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
-                sineVal = nextSiliconSineFP32(x, functionVersion);
+                sineVal = nextSiliconSineFP32(x, 7);
                 break;
 
         }
