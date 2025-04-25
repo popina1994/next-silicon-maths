@@ -7,6 +7,7 @@ extern "C" {
 #include <iostream>
 #include <vector>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <functional>
 
 namespace NextSilicon
 {
@@ -90,7 +91,7 @@ namespace NextSilicon
         return vCoeffs;
     }
 
-    static std::vector<float> computeChebyshevCoefficients(float(*f)(float), uint32_t numCoeffs) {
+    static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs) {
         std::vector<float> vCoeffs(numCoeffs, 0.f);
 
         // TODO: optimizations (cos(pi k...)) and theta
@@ -107,6 +108,27 @@ namespace NextSilicon
         }
 
         return vCoeffs;
+    }
+
+
+    float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN)
+    {
+        auto wrappedSine = [&chebDegreeN](float x) {
+            return nextSiliconSineFP32Taylor(x, chebDegreeN);
+        };
+        auto chebCoeffs = computeChebyshevCoefficients(wrappedSine, chebDegreeN - 1);
+        auto chebPoly = computeChebyshevPolynomial(x, chebDegreeN - 1);
+
+        // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
+        chebCoeffs[0] /= 2.0f;
+
+        float sum = chebCoeffs[0];
+        for (int k = 1; k <= chebDegreeN; k++)
+        {
+            sum += chebCoeffs[k] * chebPoly[k];
+        }
+
+        return sum;
     }
 
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)
@@ -127,26 +149,6 @@ namespace NextSilicon
         }
 
         return sineVal;
-    }
-
-    float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN)
-    {
-        auto wrappedSine = [](float x) {
-            return nextSiliconSineFP32Taylor(x);
-        };
-        auto chebCoeffs = computeChebyshevCoefficients(wrappedSine, chebDegreeN - 1);
-        auto chebPoly = computeChebyshevPolynomial(x, chebDegreeN - 1);
-
-        // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
-        chebCoeffs[0] /= 2.0f;
-
-        float sum = chebCoeffs[0];
-        for (int k = 1; k <= chebDegreeN; k++)
-        {
-            sum += chebCoeffs[k] * chebPoly[k];
-        }
-
-        return sum;
     }
 
 }
