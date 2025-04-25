@@ -30,6 +30,7 @@ namespace NextSilicon
         }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
+        // std::cout << xPiRange << std::endl;
 
         if (std::abs(x) > PI_F)
         {
@@ -152,20 +153,22 @@ namespace NextSilicon
         {
             return 0;
         }
-
+        std::cout << x << std::endl;
         auto xPiRange = fmodf(x, TWO_PI_F);
 
+        std::cout << xPiRange << std::endl;
         if (std::abs(x) > PI_F)
         {
             xPiRange -=  std::signbit(x) * TWO_PI_F;
         }
+        std::cout << xPiRange << std::endl;
 
         auto b = PI_F + 0.001;
         auto a = -PI_F - 0.001;
         auto y = (2.0f * xPiRange - a - b) / (b - a);
         auto y2 = 2.f * y;
+        // auto chebCoeffs = computeChebyshevCoefficients(wrappedSine, chebDegreeN, a, b);
         auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN, a, b);
-        //auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN - 1);
         // auto chebPoly = computeChebyshevPolynomial(y, chebDegreeN - 1);
 
         // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
@@ -181,14 +184,12 @@ namespace NextSilicon
         float dMPlusOne = 0.f;
         // Clenshaw's formula
         for (std::size_t k = chebDegreeN - 1; k > 0; k--) {
-            // std::cout <<  k << " " << chebCoeffs[k] << std::endl;
             float bCurr = y2 * dMPlusOne - dMPlusTwo + chebCoeffs[k];
             dMPlusTwo = dMPlusOne;
             dMPlusOne = bCurr;
         }
 
         return  y * dMPlusOne - dMPlusTwo +  chebCoeffs[0] * 0.5;
-        // return sum;
     }
 
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)

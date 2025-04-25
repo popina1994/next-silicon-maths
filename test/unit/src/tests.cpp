@@ -44,26 +44,6 @@ TEST(CustomSinTest, NaN) {
     EXPECT_EQ(cnt, 2);
 }
 
-TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
-    std::vector<float> vVals =  {-std::numbers::pi_v<float> / 16, -std::numbers::pi_v<float> / 4,
-        -std::numbers::pi_v<float> / 8 , -std::numbers::pi_v<float>/2, -0.f, 0.f,
-        std::numbers::pi_v<float> / 2, std::numbers::pi_v<float> / 4,
-        std::numbers::pi_v<float> / 8, std::numbers::pi_v<float> / 16};
-
-    SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 11;
-    for (auto val: vVals)
-    {
-        auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
-        auto sinGoldVal = ::sinf(val);
-        auto relError = computeRelativeError(sinGoldVal, sinOptVal);
-
-        EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
-        // std::cout << "FIRST" sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
-    }
-}
-
-
 TEST(CustomSinTest, ChebPolyPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
     std::vector<float> vVals =  {-std::numbers::pi_v<float> / 16, -std::numbers::pi_v<float> / 4,
         -std::numbers::pi_v<float> / 8 , -std::numbers::pi_v<float>/2, -0.f, 0.f,
@@ -113,7 +93,25 @@ TEST(CustomSinTest, ChebPolyPeriodEdgeCasesMinPiMinDivTwo) {
     }
 }
 
-TEST(CustomSinTest, TaylorPeriodEdgeCasesMinPiMinDivTwo) {
+TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
+    std::vector<float> vVals =  {-std::numbers::pi_v<float> / 16, -std::numbers::pi_v<float> / 4,
+        -std::numbers::pi_v<float> / 8 , -std::numbers::pi_v<float>/2, -0.f, 0.f,
+        std::numbers::pi_v<float> / 2, std::numbers::pi_v<float> / 4,
+        std::numbers::pi_v<float> / 8, std::numbers::pi_v<float> / 16};
+
+    SineArguments sinArgs;
+    sinArgs.taylorDegreeEnd = 11;
+    for (auto val: vVals)
+    {
+        auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
+        auto sinGoldVal = ::sinf(val);
+        auto relError = computeRelativeError(sinGoldVal, sinOptVal);
+
+        EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
+    }
+}
+
+TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiMinDivTwo) {
     std::vector<float> vVals =  {std::numbers::pi_v<float> / 16 + -std::numbers::pi_v<float>/2, -std::numbers::pi_v<float> / 4 + -std::numbers::pi_v<float>/2,
         -std::numbers::pi_v<float> / 8 + -std::numbers::pi_v<float>/2, -std::numbers::pi_v<float>/2 + -std::numbers::pi_v<float>/2,
         std::numbers::pi_v<float> / 2 + std::numbers::pi_v<float> / 2, std::numbers::pi_v<float> / 4 + std::numbers::pi_v<float> / 2,
@@ -137,5 +135,49 @@ TEST(CustomSinTest, TaylorPeriodEdgeCasesMinPiMinDivTwo) {
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
 
         EXPECT_LE(relError, std::numeric_limits<float>::epsilon() * 10);
+    }
+}
+
+
+TEST(CustomSinTest, DISABLED_TaylorSeriesLargeNumbers)
+{
+    std::vector<float> vVals =  { std::numeric_limits<float>::lowest(),
+        std::numeric_limits<float>::min(), std::numeric_limits<float>::max()};
+
+    SineArguments sinArgs;
+    sinArgs.taylorDegreeEnd = 11;
+    for (auto val: vVals)
+    {
+        auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
+        auto sinGoldVal = ::sinf(val);
+        auto relError = computeRelativeError(sinGoldVal, sinOptVal);
+        std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
+
+        // EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
+    }
+}
+
+
+TEST(CustomSinTest, ChebPolyLargeNumbers)
+{
+    std::vector<float> vVals =  { std::numeric_limits<float>::lowest(),
+        std::numeric_limits<float>::min()};
+    //std::numeric_limits<float>::max()
+     std::map<float, float> sineValues = {
+    {std::numeric_limits<float>::lowest(),  -0.98540003f },
+    { std::numeric_limits<float>::min(),  0 }
+    };
+    // On different systems different outputs.
+    // { std::numeric_limits<float>::max(),  0.98540003f }
+    SineArguments sinArgs;
+    sinArgs.taylorDegreeEnd = 11;
+    for (auto val: vVals)
+    {
+        auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
+        auto sinGoldVal = sineValues[val];
+        auto relError = computeRelativeError(sinGoldVal, sinOptVal);
+        std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
+
+        EXPECT_LE(relError, std::numeric_limits<float>::epsilon() * 1e3);
     }
 }

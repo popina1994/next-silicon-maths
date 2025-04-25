@@ -14,9 +14,9 @@ AFL_C_COMPILER=/usr/bin/afl-clang
 AFL_CXX_COMPILER=/usr/bin/afl-clang++
 
 # Lib fuzz parameters
-LIB_FUZZ_NUM_RUNS=10
+LIB_FUZZ_NUM_RUNS=1000
 LIB_FUZZ_MAX_LEN=10
-LIB_FUZZ_SEED=15
+LIB_FUZZ_SEED=100
 
 # Build
 cmake .. -DCMAKE_C_COMPILER=$C_COMPILER -DCMAKE_CXX_COMPILER=$CXX_COMPILER\
@@ -33,6 +33,7 @@ mkdir -p corpus
 
 # Run fuzzying
 #./Next-Silicon-Maths-fuzz-main_fuzzy  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
+./Next-Silicon-Maths-fuzz-main_fuzzy_2  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 
 #./Next-Silicon-Maths
 # Run afl: still not fully supported

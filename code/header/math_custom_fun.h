@@ -35,6 +35,25 @@ namespace NextSilicon
         CHEB_POLY
     };
 
+        /**
+     * @brief Computes sin using Chebyshev Approximation.
+     *
+     * This utility transforms the input x from the interval [-pi, pi] into the standard Chebyshev
+     * interval [-1, 1], applies the original function, and returns the result.
+     *
+     * @tparam Func A callable type accepting a single float argument.
+     * @param fMapped The original function defined on [-1, 1].
+     * @param a The lower bound of the input domain.
+     * @param b The upper bound of the input domain.
+     * @return A new function that takes an input in [a, b], maps it to [-1, 1], and returns fMapped(mapped input).
+     *
+     * @note The caller is responsible for ensuring the input x ∈ [a, b].
+     *
+     * @example
+     * auto chebFunc = [](float xi) { return std::cos(xi); };
+     * auto wrapped = make_chebyshev_input_wrapper(chebFunc, 0.0f, 3.0f);
+     * float result = wrapped(1.5f); // Internally evaluates cos(xi), where xi = 0
+     */
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs = SineArguments{});
 }
 
