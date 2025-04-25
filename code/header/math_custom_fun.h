@@ -5,7 +5,7 @@ namespace NextSilicon
 {
     float nextSiliconSineFP32(float x, int taylorDegreeEnd = 7);
 
-        enum class FunctionVersion
+    enum class FunctionVersion
     {
         TAYLOR_C_ORIGINAL,
         TAYLOR_CPP_OPTIMIZED,

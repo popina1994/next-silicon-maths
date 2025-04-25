@@ -69,13 +69,24 @@ if (UNIT_TEST)
 endif()
 
 if (FUZZ_BUILD)
-    add_executable(${PROJECT_NAME}-fuzz ${PROJECT_SOURCE_DIR}/test/fuzzy/main_fuzzy.cpp ${CPP_SOURCES})
-    target_compile_options(${PROJECT_NAME}-fuzz PRIVATE -O1 -g)
-    target_compile_options(${PROJECT_NAME}-fuzz PRIVATE -fsanitize=fuzzer -fsanitize=address)
-    target_link_libraries(${PROJECT_NAME}-fuzz PRIVATE -fsanitize=fuzzer -fsanitize=address)
+    file(GLOB FUZZY_CPP_TESTS
+        ${PROJECT_SOURCE_DIR}/test/fuzzy/lib_fuzz/*.cpp
+        ${PROJECT_SOURCE_DIR}/test/fuzzy/lib_fuzz/*.cxx
+    )
+    set(LIST_FUZZY_FILES)
+    foreach(FUZZY_CPP_TEST IN LISTS FUZZY_CPP_TESTS)
+        get_filename_component(FUFY_EXEC_NAME_FILE ${FUZZY_CPP_TEST} NAME_WE)
+        set(FUZZY_EXEC_NAME ${PROJECT_NAME}-fuzz-${FUFY_EXEC_NAME_FILE})
+        message("FUZZY" ${FUZZY_CPP_TEST} " DISTANCE "${FUZZY_EXEC_NAME})
 
-    target_include_directories(${PROJECT_NAME}-fuzz PRIVATE  ${Boost_INCLUDE_DIRS} code/header)
-    target_link_libraries(${PROJECT_NAME}-fuzz PRIVATE ${PROJECT_NAME}-c_lib)
+        add_executable(${FUZZY_EXEC_NAME} ${FUZZY_CPP_TEST} ${CPP_SOURCES})
+        target_compile_options(${FUZZY_EXEC_NAME} PRIVATE -O1 -g)
+        target_compile_options(${FUZZY_EXEC_NAME} PRIVATE -fsanitize=fuzzer -fsanitize=address)
+        target_link_libraries(${FUZZY_EXEC_NAME} PRIVATE -fsanitize=fuzzer -fsanitize=address)
+
+        target_include_directories(${FUZZY_EXEC_NAME} PRIVATE  ${Boost_INCLUDE_DIRS} code/header)
+        target_link_libraries(${FUZZY_EXEC_NAME} PRIVATE ${PROJECT_NAME}-c_lib)
+    endforeach()
 endif()
 
 
