@@ -19,6 +19,10 @@ namespace NextSilicon
         {
             throw SinNaN();
         }
+        if (std::abs(x) == 0.f)
+        {
+            return 0;
+        }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
         std::cout << "X IN range" << xPiRange << std::endl;
