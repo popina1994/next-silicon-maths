@@ -5,16 +5,20 @@ extern "C" {
 #include "fp32_custom_sine.h"
 }
 #include <iostream>
+#include <vector>
+#include <boost/multiprecision/cpp_int.hpp>
 
 namespace NextSilicon
 {
 
     float nextSiliconSineFP32(float x, uint32_t taylorDegreeEnd)
     {
+        using namespace boost::multiprecision;
         static constexpr auto PI_F = std::numbers::pi_v<float>;
         static constexpr auto TWO_PI_F = 2 * PI_F;
         static constexpr auto TAYLOR_DEGREE_START = 3u;
         static constexpr auto TAYLOR_DEGREE_NEXT_INC = 2u;
+
         if (std::isnan(x))
         {
             throw SinNaN();
@@ -36,6 +40,15 @@ namespace NextSilicon
         auto term = xPiRange;
         const auto xPiRangeSquared = xPiRange * xPiRange;
         auto sign = 1;
+        std::vector<cpp_int> vFact(taylorDegreeEnd + 1, 0);
+        vFact[1] = 1;
+
+        for (auto taylorDegree = TAYLOR_DEGREE_START;
+            taylorDegree <= taylorDegreeEnd;
+            taylorDegree += TAYLOR_DEGREE_NEXT_INC)
+        {
+            vFact[taylorDegree] = vFact[taylorDegree - 2] * (taylorDegree - 1) * taylorDegree;
+        }
 
         for (auto taylorDegree = TAYLOR_DEGREE_START;
             taylorDegree <= taylorDegreeEnd;
@@ -43,8 +56,16 @@ namespace NextSilicon
         {
             sign = -sign;
             term = term * xPiRangeSquared;
-            term = term / ((taylorDegree - 1) * taylorDegree);
-            result += sign * term;
+            auto termAdd = term / float(vFact[taylorDegree]);
+            if (sign == 1)
+            {
+                result += termAdd;
+            }
+            else
+            {
+                result -= termAdd;
+            }
+
             // std::cout << taylorDegree << " " << result << std::endl;
         }
 
@@ -62,7 +83,6 @@ namespace NextSilicon
             case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
                 sineVal = nextSiliconSineFP32(x, sineArgs.taylorDegreeEnd);
                 break;
-
         }
 
         return sineVal;

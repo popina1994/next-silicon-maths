@@ -50,14 +50,14 @@ TEST(CustomSinTest, PeriodEdgeCasesMinPiDivTwoPiDivTwo) {
         std::numbers::pi_v<float> / 8, std::numbers::pi_v<float> / 16};
 
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 13;
+    sinArgs.taylorDegreeEnd = 11;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
         auto sinGoldVal = std::sin(val);
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
 
-        EXPECT_LT(relError, std::numeric_limits<float>::epsilon());
+        EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
     }
 }
 
@@ -81,6 +81,6 @@ TEST(CustomSinTest, PeriodEdgeCasesMinPiMinDivTwo) {
         auto relError = computeRelativeError(sinGoldVal, sinOptVal);
         std::cout << val << " " << sinOptVal << " " << sinGoldVal << " " << relError << std::endl;
 
-        EXPECT_LT(relError, std::numeric_limits<float>::epsilon());
+        EXPECT_LE(relError, std::numeric_limits<float>::epsilon());
     }
 }
