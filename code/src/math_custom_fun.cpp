@@ -19,7 +19,7 @@ namespace NextSilicon
         auto xPiRange = fmodf(x, TWO_PI_F);
         std::cout << "X IN range" << xPiRange << std::endl;
 
-        if (abs(x) > PI_F)
+        if (std::abs(x) > PI_F)
         {
             xPiRange -=  std::signbit(x) * TWO_PI_F;
         }

@@ -20,14 +20,14 @@ uint8_t charToNum(uint8_t num)
 
 void memCpyMy(uint8_t* dst, const uint8_t* src, int size)
 {
-    std::cout << size << std::endl;
+    // std::cout << size << std::endl;
     for (int idx = 0; idx < size; idx++)
     {
         uint8_t pos1 = charToNum(src[2 * idx]);
         uint8_t pos2 = charToNum(src[2 * idx + 1]);
-        std::cout << int(dst[size - idx - 1]) << std::endl;
+        // std::cout << int(dst[size - idx - 1]) << std::endl;
         dst[size - idx - 1] = (pos1  << 4) | pos2;
-        std::cout << idx << " " << (int)dst[size - idx - 1] << " " <<  (int)pos1 << " " << (int)pos2 << std::endl;
+        // std::cout << idx << " " << (int)dst[size - idx - 1] << " " <<  (int)pos1 << " " << (int)pos2 << std::endl;
     }
 }
 void fuzzTarget(const uint8_t *data, size_t size) {
@@ -38,18 +38,23 @@ void fuzzTarget(const uint8_t *data, size_t size) {
     }
     for (int idx = 0; idx < size; idx++)
     {
-        std::cout << idx << " " << std::hex << data[idx] << " " << std::endl;
+        // std::cout << idx << " " << std::hex << data[idx] << " " << std::endl;
     }
     float input_value;
     memCpyMy(reinterpret_cast<uint8_t*>(&input_value), data, sizeof(input_value));
-    std::cout << "Interpreted float value: " << input_value <<  std::endl;
-
+    // std::cout << "Interpreted float value: " << input_value <<  std::endl;
+    if (input_value <= 1e-20f and input_value >= -1.0e-20f)
+    {
+        // *t  = 1;
+    }
     float result = input_value * input_value;
     std::cout << "Squared value: " << result << std::endl;
 }
 
 int main(int argc, char **argv) {
     // AFL will pass input data as stdin
+    std::cout << "WTF" << std::endl;
+
     if (argc > 1) {
         fuzzTarget(reinterpret_cast<uint8_t*>(argv[1]), strlen(argv[1]));
     }

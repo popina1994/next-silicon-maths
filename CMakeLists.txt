@@ -11,8 +11,13 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 find_package(Boost REQUIRED COMPONENTS system thread iostreams program_options)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+option(UNIT_TEST "Build Unit tests" ON)
+option(AFL_BUILD "Build AFL" ON)
+option(FUZZ_BUILD "Build libFuzz" ON)
+set(NEXT_SILICON_ROOT_PATH ${PROJECT_SOURCE_DIR} CACHE STRING "A string passed to the subproject")
+set(AFL_C_COMPILER ${AFL_C_COMPILER} CACHE STRING "A string passed to the subproject")
+set(AFL_CXX_COMPILER ${AFL_CXX_COMPILER} CACHE STRING "A string passed to the subproject")
+
 
 enable_testing()
 
@@ -25,57 +30,55 @@ file(GLOB_RECURSE C_SOURCES
     ${PROJECT_SOURCE_DIR}/code/src/*.c
 )
 
-file(GLOB_RECURSE TEST_SOURCES
-    ${PROJECT_SOURCE_DIR}/test/src/*.cpp
-    ${PROJECT_SOURCE_DIR}/test/src/*.cxx
-)
-
 add_library(${PROJECT_NAME}-c_lib STATIC ${C_SOURCES})
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/code/main.cpp ${CPP_SOURCES})
-add_executable(${PROJECT_NAME}-test ${CPP_SOURCES} ${TEST_SOURCES})
+
+target_compile_options(${PROJECT_NAME} PRIVATE -O3)
 
 target_include_directories(${PROJECT_NAME}-c_lib PRIVATE  code/header)
 target_include_directories(${PROJECT_NAME} PRIVATE  ${Boost_INCLUDE_DIRS} code/header)
-target_include_directories(${PROJECT_NAME}-test PRIVATE  ${Boost_INCLUDE_DIRS} code/header test/header)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}-c_lib)
-target_link_libraries(${PROJECT_NAME}-test PRIVATE ${PROJECT_NAME}-c_lib)
-
 target_link_libraries(${PROJECT_NAME} PRIVATE
     ${Boost_LIBRARIES}
 )
 
-target_link_libraries(${PROJECT_NAME}-test PRIVATE
-    ${Boost_LIBRARIES} gtest_main
-)
+if (UNIT_TEST)
+    file(GLOB_RECURSE TEST_SOURCES
+    ${PROJECT_SOURCE_DIR}/test/unit/src/*.cpp
+    ${PROJECT_SOURCE_DIR}/test/unit/src/*.cxx
+    )
+    add_executable(${PROJECT_NAME}-test ${CPP_SOURCES} ${TEST_SOURCES})
+    target_link_libraries(${PROJECT_NAME}-test PRIVATE
+        ${Boost_LIBRARIES} gtest_main
+    )
+    target_compile_options(${PROJECT_NAME}-test PRIVATE -O1 -g)
+    target_include_directories(${PROJECT_NAME}-test PRIVATE  ${Boost_INCLUDE_DIRS} code/header test/unit/header)
+    target_link_libraries(${PROJECT_NAME}-test PRIVATE ${PROJECT_NAME}-c_lib)
 
-# Unit tests
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
-)
-FetchContent_MakeAvailable(googletest)
+    # Unit tests
+    include(FetchContent)
+    FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/heads/main.zip
+    )
+    FetchContent_MakeAvailable(googletest)
 
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}-test)
+    include(GoogleTest)
+    gtest_discover_tests(${PROJECT_NAME}-test)
+endif()
 
-# Fuzzy tests
-set(CMAKE_C_COMPILER ${CMAKE_FUZZY_C_COMPILER})
-set(CMAKE_CXX_COMPILER ${CMAKE_FUZZY_CXX_COMPILER})
-message("Compiler is" ${CMAKE_CXX_COMPILER})
+if (FUZZ_BUILD)
+    add_executable(${PROJECT_NAME}-fuzz ${PROJECT_SOURCE_DIR}/test/fuzzy/main_fuzzy.cpp ${CPP_SOURCES})
+    target_compile_options(${PROJECT_NAME}-fuzz PRIVATE -O1 -g)
+    target_compile_options(${PROJECT_NAME}-fuzz PRIVATE -fsanitize=fuzzer -fsanitize=address)
+    target_link_libraries(${PROJECT_NAME}-fuzz PRIVATE -fsanitize=fuzzer -fsanitize=address)
 
-add_executable(${PROJECT_NAME}-afl ${PROJECT_SOURCE_DIR}/test/main_fuzzy.cpp ${CPP_SOURCES})
-target_compile_options(${PROJECT_NAME}-afl PRIVATE -O1 -g)
-target_compile_options(${PROJECT_NAME}-afl PRIVATE -fsanitize=address)
-target_link_libraries(${PROJECT_NAME}-afl PRIVATE -fsanitize=address)
+    target_include_directories(${PROJECT_NAME}-fuzz PRIVATE  ${Boost_INCLUDE_DIRS} code/header)
+    target_link_libraries(${PROJECT_NAME}-fuzz PRIVATE ${PROJECT_NAME}-c_lib)
+endif()
 
 
-target_include_directories(${PROJECT_NAME}-afl PRIVATE  ${Boost_INCLUDE_DIRS} code/header)
-
-target_link_libraries(${PROJECT_NAME}-afl PRIVATE ${PROJECT_NAME}-c_lib)
-
-set(AFL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/out)
-
-# Ensure that the output directory is created
-file(MAKE_DIRECTORY ${AFL_OUTPUT_DIR})
+if (AFL_BUILD)
+    add_subdirectory(test/fuzzy/afl)
+endif()
