@@ -19,8 +19,6 @@ set(AFL_C_COMPILER ${AFL_C_COMPILER} CACHE STRING "A string passed to the subpro
 set(AFL_CXX_COMPILER ${AFL_CXX_COMPILER} CACHE STRING "A string passed to the subproject")
 
 
-enable_testing()
-
 file(GLOB_RECURSE CPP_SOURCES
     ${PROJECT_SOURCE_DIR}/code/src/*.cpp
     ${PROJECT_SOURCE_DIR}/code/src/*.cxx
@@ -44,17 +42,19 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 if (UNIT_TEST)
+    enable_testing()
     file(GLOB_RECURSE TEST_SOURCES
-    ${PROJECT_SOURCE_DIR}/test/unit/src/*.cpp
-    ${PROJECT_SOURCE_DIR}/test/unit/src/*.cxx
-    )
-    add_executable(${PROJECT_NAME}-test ${CPP_SOURCES} ${TEST_SOURCES})
-    target_link_libraries(${PROJECT_NAME}-test PRIVATE
+        ${PROJECT_SOURCE_DIR}/test/unit/src/*.cpp
+        ${PROJECT_SOURCE_DIR}/test/unit/src/*.cxx)
+
+    set(UNIT_TEST_BINARY ${PROJECT_NAME}-test)
+    add_executable(${UNIT_TEST_BINARY} ${CPP_SOURCES} ${TEST_SOURCES})
+    target_link_libraries(${UNIT_TEST_BINARY} PRIVATE
         ${Boost_LIBRARIES} gtest_main
     )
-    target_compile_options(${PROJECT_NAME}-test PRIVATE -O1 -g)
-    target_include_directories(${PROJECT_NAME}-test PRIVATE  ${Boost_INCLUDE_DIRS} code/header test/unit/header)
-    target_link_libraries(${PROJECT_NAME}-test PRIVATE ${PROJECT_NAME}-c_lib)
+    target_compile_options(${UNIT_TEST_BINARY} PRIVATE -O1 -g)
+    target_include_directories(${UNIT_TEST_BINARY} PRIVATE  ${Boost_INCLUDE_DIRS} code/header test/unit/header)
+    target_link_libraries(${UNIT_TEST_BINARY} PRIVATE ${PROJECT_NAME}-c_lib)
 
     # Unit tests
     include(FetchContent)
@@ -65,7 +65,7 @@ if (UNIT_TEST)
     FetchContent_MakeAvailable(googletest)
 
     include(GoogleTest)
-    gtest_discover_tests(${PROJECT_NAME}-test)
+    gtest_discover_tests(${UNIT_TEST_BINARY})
 endif()
 
 if (FUZZ_BUILD)
@@ -73,7 +73,6 @@ if (FUZZ_BUILD)
         ${PROJECT_SOURCE_DIR}/test/fuzzy/lib_fuzz/*.cpp
         ${PROJECT_SOURCE_DIR}/test/fuzzy/lib_fuzz/*.cxx
     )
-    set(LIST_FUZZY_FILES)
     foreach(FUZZY_CPP_TEST IN LISTS FUZZY_CPP_TESTS)
         get_filename_component(FUFY_EXEC_NAME_FILE ${FUZZY_CPP_TEST} NAME_WE)
         set(FUZZY_EXEC_NAME ${PROJECT_NAME}-fuzz-${FUFY_EXEC_NAME_FILE})
