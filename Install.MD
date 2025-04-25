@@ -2,10 +2,12 @@
 ## Dependencies
 The following subsection contains the list of required libraries and packages need to be installed in order to run the solution.
 # Application
-1. C++ implementation
+1. Bash (at least 5.1.16)
+2. C++ implementation
     1. gcc (at least 11.4.0)
     2. cmake (at least 3.22.1)
-    3. Fuzzy librarry afl :
+    3. boost (at least 1.74.0)
+    4. Fuzzy library afl :
         1. sudo apt install afl
 
 # Plotting

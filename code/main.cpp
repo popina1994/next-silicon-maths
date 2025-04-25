@@ -6,19 +6,27 @@
 #include <utility>
 #include <numbers>
 #include <limits>
+
 std::tuple<float, float, float, float> evalPrecision(float val)
 {
-    auto sinValCustom = NextSilicon::nextSiliconSineFP32(val, 50);
+    auto sinValCustom = NextSilicon::nextSiliconSineFP32(val, 1000);
     auto sinVal = std::sin(val);
     auto absError = std::abs(sinVal - sinValCustom);
     auto relError = absError / sinVal;
     return {absError, relError, sinValCustom, sinVal};
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
     std::cout << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
     for (auto val = -std::numbers::pi_v<float>; val < std::numbers::pi_v<float>; val += 0.1f)
+    {
+        auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
+        std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
+    }
+
+    std::cout << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
+    for (auto val = 1e14f * std::numbers::pi_v<float>; val < 1e15f * std::numbers::pi_v<float>; val += 1e14f)
     {
         auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
         std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;

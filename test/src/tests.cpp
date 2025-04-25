@@ -1,10 +1,16 @@
 #include <gtest/gtest.h>
+#include <numbers>
+#include "math_custom_fun.h"
 
-TEST(SampleTest, Addition) {
-    EXPECT_EQ(1 + 1, 2);
+using namespace NextSilicon;
+
+TEST(CustomSinTest, Corner) {
+    EXPECT_NEAR(nextSiliconSineFP32(std::numbers::pi_v<float>, FunctionVersion::TAYLOR_C_ORIGINAL), 0, 1e-5);
+    EXPECT_NEAR(nextSiliconSineFP32(-std::numbers::pi_v<float>, FunctionVersion::TAYLOR_C_ORIGINAL), 0, 1e-5);
+    EXPECT_NEAR(nextSiliconSineFP32(0, FunctionVersion::TAYLOR_C_ORIGINAL), 0, 1e-5);
 }
 
-TEST(SampleTest, Addition2) {
+TEST(CustomSinTest, First) {
     EXPECT_EQ(1 + 1, 2);
 }
 

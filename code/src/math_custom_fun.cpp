@@ -4,13 +4,10 @@
 extern "C" {
 #include "fp32_custom_sine.h"
 }
+#include <iostream>
+
 namespace NextSilicon
 {
-    enum class FunctionVersion
-    {
-        TAYLOR_C_ORIGINAL,
-        TAYLOR_CPP_OPTIMIZED,
-    };
 
     float nextSiliconSineFP32(float x, int taylorDegreeEnd)
     {
@@ -20,6 +17,7 @@ namespace NextSilicon
         static constexpr auto TAYLOR_DEGREE_NEXT_INC = 2;
 
         auto xPiRange = fmodf(x, TWO_PI_F);
+        std::cout << "X IN range" << xPiRange << std::endl;
 
         if (abs(x) > PI_F)
         {
@@ -28,7 +26,7 @@ namespace NextSilicon
 
         auto result = xPiRange;
         auto term = xPiRange;
-        auto xPiRangeSquared = xPiRange * xPiRange;
+        const auto xPiRangeSquared = xPiRange * xPiRange;
         auto sign = 1;
 
         for (auto taylorDegree = TAYLOR_DEGREE_START;
@@ -39,6 +37,7 @@ namespace NextSilicon
             term = term * xPiRangeSquared;
             term = term / ((taylorDegree - 1) * taylorDegree);
             result += sign * term;
+            // std::cout << taylorDegree << " " << result << std::endl;
         }
 
         return result;
