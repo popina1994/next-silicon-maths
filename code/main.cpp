@@ -10,10 +10,12 @@
 
 std::tuple<float, float, float, float> evalPrecision(float val)
 {
-    auto sinValCustom = NextSilicon::nextSiliconSineFP32Taylor(val, 5);
+    NextSilicon::SineArguments sineArgs;
+    sineArgs.taylorDegreeEnd = 15;
+    auto sinValCustom = NextSilicon::nextSiliconSineFP32(val, NextSilicon::FunctionVersion::TAYLOR_CPP_OPTIMIZED, sineArgs);
     auto sinVal = std::sin(val);
     auto absError = std::abs(sinVal - sinValCustom);
-    auto relError = absError / sinVal;
+    auto relError = std::abs(absError) / std::abs(sinVal);
     return {absError, relError, sinValCustom, sinVal};
 }
 
@@ -27,24 +29,24 @@ int main(int argc, char* argv[])
         3 * std::numbers::pi_v<float> / 2, 2 * std::numbers::pi_v<float>};
 
 
-    for (auto val = -std::numbers::pi_v<float>; val < std::numbers::pi_v<float>; val += 0.1f)
+    for (auto val = -std::numbers::pi_v<float>; val < std::numbers::pi_v<float>; val += 0.001f)
     {
         auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
-        std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
+        std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " ABS: " << absError << " REL: " << relError << std::endl;
     }
 
-    std::cout << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
-    for (auto val = 1e14f * std::numbers::pi_v<float>; val < 1e15f * std::numbers::pi_v<float>; val += 1e14f)
-    {
-        auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
-        std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
-    }
+    // std::cout << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
+    // for (auto val = 1e14f * std::numbers::pi_v<float>; val < 1e15f * std::numbers::pi_v<float>; val += 1e14f)
+    // {
+    //     auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
+    //     std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
+    // }
 
-       for (auto val: vVals)
-    {
-         auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
-        std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
-    }
+    //    for (auto val: vVals)
+    // {
+    //      auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val);
+    //     std::cout << "VAL: " << val << " " << "SINVAL: " << sinVal << " " << "SINVAL CUSTOM: " << sinValCustom << " " << absError << " " << relError << std::endl;
+    // }
 
     return 0;
 }

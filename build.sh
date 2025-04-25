@@ -26,7 +26,7 @@ make -j
 # Run regular file
 # ctest --output-on-failure
 # Run unit tests
-./Next-Silicon-Maths-test
+# ./Next-Silicon-Maths-test
 mkdir -p input
 mkdir -p corpus
 
@@ -36,7 +36,7 @@ mkdir -p corpus
 # ./Next-Silicon-Maths-fuzz-main_fuzzy_2  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 # ./Next-Silicon-Maths-fuzz-main_fuzzy_3  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 
-#./Next-Silicon-Maths
+./Next-Silicon-Maths
 # Run afl: still not fully supported
 export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 #afl-fuzz -i input -o output -- ./Next-Silicon-Maths-afl

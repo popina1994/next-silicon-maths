@@ -1,0 +1,99 @@
+import pandas as pd
+import re
+import matplotlib.pyplot as plt
+
+
+def read_data(path: str):
+    with open(path, 'r') as file:
+        data = file.read()
+    return data
+
+
+def create_pandas_from_data(path):
+    data = read_data(path)
+    # Define a regex pattern to match the structure
+    pattern = r"VAL:\s*(?P<VAL>[-\d\.e\+]+)\s*SINVAL:\s*(?P<SINVAL>[-\d\.e\+]+)\s*SINVAL\sCUSTOM:\s*(?P<SINVAL_CUSTOM>[-\d\.e\+]+)\s*ABS:\s*(?P<ABS>[-\d\.e\+]+)\s*REL:\s*(?P<REL>[-\d\.e\+]+)"
+
+    # Find all matches using the regex pattern
+    matches = re.findall(pattern, data)
+
+    # Convert the matches into a pandas DataFrame
+    df = pd.DataFrame(matches, columns=["VAL", "SINVAL", "SINVAL_CUSTOM", "ABS", "REL"])
+
+    # Convert all columns to float for easier analysis
+    df = df.astype(float)
+
+    return df
+
+df_tay_orig = create_pandas_from_data('results/accuracy/tay_orig_inc_pi_001.txt')
+df_tay_orig = df_tay_orig[(df_tay_orig['VAL'] > -3.13) & (df_tay_orig['VAL'] < 3.13)]
+print(df_tay_orig)
+
+df_tay_opti_7 = create_pandas_from_data('results/accuracy/tay_opt_deg_7_inc_pi_001.txt')
+df_tay_opti_7 = df_tay_opti_7[(df_tay_opti_7['VAL'] > -3.13) & (df_tay_opti_7['VAL'] < 3.13)]
+print(df_tay_opti_7)
+
+df_cheb_poly_7 = create_pandas_from_data('results/accuracy/cheb_poly_deg_7_inc_pi_001.txt')
+df_cheb_poly_7 = df_cheb_poly_7[(df_cheb_poly_7['VAL'] > -3.13) & (df_cheb_poly_7['VAL'] < 3.13)]
+print(df_cheb_poly_7)
+
+df_tay_opti_11 = create_pandas_from_data('results/accuracy/tay_opt_deg_11_inc_pi_001.txt')
+df_tay_opti_11 = df_tay_opti_11[(df_tay_opti_11['VAL'] > -3.13) & (df_tay_opti_11['VAL'] < 3.13)]
+print(df_tay_opti_11)
+
+df_cheb_poly_11 = create_pandas_from_data('results/accuracy/cheb_poly_deg_11_inc_pi_001.txt')
+df_cheb_poly_11 = df_cheb_poly_11[(df_cheb_poly_11['VAL'] > -3.13) & (df_cheb_poly_11['VAL'] < 3.13)]
+print(df_cheb_poly_11)
+
+df_tay_opti_15 = create_pandas_from_data('results/accuracy/tay_opt_deg_15_inc_pi_001.txt')
+df_tay_opti_15 = df_tay_opti_15[(df_tay_opti_15['VAL'] > -3.13) & (df_tay_opti_15['VAL'] < 3.13)]
+print(df_tay_opti_15)
+
+df_cheb_poly_15 = create_pandas_from_data('results/accuracy/cheb_poly_deg_15_inc_pi_001.txt')
+df_cheb_poly_15 = df_cheb_poly_15[(df_cheb_poly_15['VAL'] > -3.13) & (df_cheb_poly_15['VAL'] < 3.13)]
+print(df_cheb_poly_15)
+
+
+# Assuming you have the DataFrame stored as `df`
+plt.plot(df_tay_orig['VAL'], df_tay_orig['REL'], label='Relative Error of Taylor original')
+plt.plot(df_tay_opti_7['VAL'], df_tay_opti_7['REL'], label='Relative Error of Taylor optimized degere 7')
+plt.plot(df_cheb_poly_7['VAL'], df_cheb_poly_7['REL'], label='Relative Error of Chebyshev degree 7')
+plt.plot(df_tay_opti_11['VAL'], df_tay_opti_11['REL'], label='Relative Error of Taylor optimized degere 11')
+plt.plot(df_cheb_poly_11['VAL'], df_cheb_poly_11['REL'], label='Relative Error of Chebyshev degree 11')
+plt.plot(df_tay_opti_15['VAL'], df_tay_opti_15['REL'], label='Relative Error of Taylor optimized degere 15')
+plt.plot(df_cheb_poly_15['VAL'], df_cheb_poly_15['REL'], label='Relative Error of Chebyshev degree 15')
+
+
+plt.xlabel('Value')
+plt.ylabel('Relative Error')
+plt.title('Relative Error vs. Value')
+plt.grid(True)
+plt.legend()
+
+# Show the plot
+plt.show()
+plt.yscale('log')
+plt.savefig('plots/accuracy/inc_rel_pi_001.pdf', format="pdf")
+
+
+plt.figure()
+# Assuming you have the DataFrame stored as `df`
+plt.plot(df_tay_orig['VAL'], df_tay_orig['ABS'], label='Absolute Error of Taylor original')
+plt.plot(df_tay_opti_7['VAL'], df_tay_opti_7['ABS'], label='Absolute Error of Taylor optimized degree 7')
+plt.plot(df_cheb_poly_7['VAL'], df_cheb_poly_7['ABS'], label='Absolute Error of Chebyshev degree 7')
+plt.plot(df_tay_opti_11['VAL'], df_tay_opti_11['ABS'], label='Absolute Error of Taylor optimized degree 11')
+plt.plot(df_cheb_poly_11['VAL'], df_cheb_poly_11['ABS'], label='Absolute Error of Chebyshev degree 11')
+plt.plot(df_tay_opti_15['VAL'], df_tay_opti_15['ABS'], label='Absolute Error of Taylor optimized degree 15')
+plt.plot(df_cheb_poly_15['VAL'], df_cheb_poly_15['ABS'], label='Absolute Error of Chebyshev degree 15')
+
+plt.xlabel('Value')
+plt.ylabel('Absolute Error')
+plt.title('Dependency of the absolute error on the value')
+plt.grid(True)
+plt.legend()
+
+# Show the plot
+plt.show()
+plt.yscale('log')
+plt.xlim(-3.14 + 0.01, 3.14 - 0.01)
+plt.savefig('plots/accuracy/inc_abs_pi_001.pdf', format="pdf")
