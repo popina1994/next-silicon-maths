@@ -14,7 +14,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED COMPONENTS system thread iostreams program_options)
 
 option(UNIT_TEST "Build Unit tests" ON)
-option(AFL_BUILD "Build AFL" ON)
+option(AFL_BUILD "Build AFL" OFF)
 option(FUZZ_BUILD "Build libFuzz" ON)
 set(NEXT_SILICON_ROOT_PATH ${PROJECT_SOURCE_DIR} CACHE STRING "A string passed to the subproject")
 set(AFL_C_COMPILER ${AFL_C_COMPILER} CACHE STRING "A string passed to the subproject")

@@ -21,7 +21,7 @@ LIB_FUZZ_SEED=15
 # Build
 cmake .. -DCMAKE_C_COMPILER=$C_COMPILER -DCMAKE_CXX_COMPILER=$CXX_COMPILER\
     -DCMAKE_AFL_C_COMPILER=$AFL_C_COMPILER -DCMAKE_AFL_CXX_COMPILER=$AFL_CXX_COMPILER
-make
+make -j
 
 # Run regular file
 # ctest --output-on-failure

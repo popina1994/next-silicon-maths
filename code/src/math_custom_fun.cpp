@@ -40,7 +40,7 @@ namespace NextSilicon
         auto term = xPiRange;
         const auto xPiRangeSquared = xPiRange * xPiRange;
         auto sign = 1;
-        std::vector<cpp_int> vFact(taylorDegreeEnd + 1, 0);
+        std::vector<float> vFact(taylorDegreeEnd + 1, 0);
         vFact[1] = 1;
 
         for (auto taylorDegree = TAYLOR_DEGREE_START;
@@ -91,18 +91,21 @@ namespace NextSilicon
         return vCoeffs;
     }
 
-    static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs) {
+    static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs, float a, float b) {
         std::vector<float> vCoeffs(numCoeffs, 0.f);
 
+        float bma = 0.5 * (b - a);
+        float bpa = 0.5 * (b + a);
         // TODO: optimizations (cos(pi k...)) and theta
         for (uint32_t j = 0u; j < numCoeffs; j++) {
             float sum = 0.f;
 
             for (uint32_t k = 0u; k < numCoeffs; k++) {
-                float theta = std::numbers::pi_v<float> * (k + 0.5f) / numCoeffs;
-                float leftCos = std::cos(theta);
-                float rightCos = std::cos(theta * j);
-                sum += f(leftCos) * rightCos;
+                float leftTheta = std::numbers::pi_v<float> * (k + 0.5f) / numCoeffs;
+                float rightTheta = leftTheta * j;
+                float leftCos = std::cos(leftTheta);
+                float rightCos = std::cos(rightTheta);
+                sum += f(leftCos * bma + bpa) * rightCos;
             }
             vCoeffs[j] = sum * 2.0f / numCoeffs;
         }
@@ -110,25 +113,82 @@ namespace NextSilicon
         return vCoeffs;
     }
 
-
+    /**
+     * @brief Approximates the sine function using Chebyshev polynomials and Clenshaw's algorithm.
+     *
+     * This function computes an approximation of sin(x) over the interval \f$ [-\pi, \pi] \f$
+     * using Chebyshev polynomials of the first kind. It first computes the Chebyshev coefficients
+     * of the sine function over the specified interval, and then evaluates the series using
+     * Clenshaw’s recurrence for numerical stability.
+     *
+     * @param x The input value in radians (expected to lie within or near [-π, π]).
+     * @param chebDegreeN The number of Chebyshev terms (degree N); determines approximation accuracy.
+     * @return Approximation of \f$ \sin(x) \f$ using Chebyshev expansion.
+     *
+     * @note
+     * - Internally maps \f$ x \in [-\pi, \pi] \f$ to \f$ \xi \in [-1, 1] \f$ via affine transformation.
+     * - Uses Clenshaw's algorithm to evaluate the Chebyshev series efficiently.
+     * - The constant term (c₀) is halved according to Chebyshev expansion conventions.
+     *
+     * @see computeChebyshevCoefficients
+     * @see nextSiliconSineFP32Taylor
+     *
+     * @example
+     * float approx = nextSiliconSineFP32Chebyshev(1.0f, 8); // Approximate sin(1.0) with 8 terms
+     */
     float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN)
     {
+        static constexpr auto PI_F = std::numbers::pi_v<float>;
+        static constexpr auto TWO_PI_F = 2 * PI_F;
         auto wrappedSine = [&chebDegreeN](float x) {
             return nextSiliconSineFP32Taylor(x, chebDegreeN);
         };
-        auto chebCoeffs = computeChebyshevCoefficients(wrappedSine, chebDegreeN - 1);
-        auto chebPoly = computeChebyshevPolynomial(x, chebDegreeN - 1);
 
-        // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
-        chebCoeffs[0] /= 2.0f;
-
-        float sum = chebCoeffs[0];
-        for (int k = 1; k <= chebDegreeN; k++)
+        if (std::isnan(x))
         {
-            sum += chebCoeffs[k] * chebPoly[k];
+            throw SinNaN();
+        }
+        if (std::abs(x) == 0.f)
+        {
+            return 0;
         }
 
-        return sum;
+        auto xPiRange = fmodf(x, TWO_PI_F);
+
+        if (std::abs(x) > PI_F)
+        {
+            xPiRange -=  std::signbit(x) * TWO_PI_F;
+        }
+
+        auto b = PI_F + 0.001;
+        auto a = -PI_F - 0.001;
+        auto y = (2.0f * xPiRange - a - b) / (b - a);
+        auto y2 = 2.f * y;
+        auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN, a, b);
+        //auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN - 1);
+        // auto chebPoly = computeChebyshevPolynomial(y, chebDegreeN - 1);
+
+        // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
+        // chebCoeffs[0] /= 2.0f;
+        // chebCoeffs[0] /= 2.0f;
+        // classical
+        // float sum = chebCoeffs[0];
+        // for (int k = 1; k <= chebDegreeN; k++)
+        // {
+        //     sum += chebCoeffs[k] * chebPoly[k];
+        // }
+        float dMPlusTwo = 0.f;
+        float dMPlusOne = 0.f;
+        // Clenshaw's formula
+        for (std::size_t k = chebDegreeN - 1; k > 0; k--) {
+            // std::cout <<  k << " " << chebCoeffs[k] << std::endl;
+            float bCurr = y2 * dMPlusOne - dMPlusTwo + chebCoeffs[k];
+            dMPlusTwo = dMPlusOne;
+            dMPlusOne = bCurr;
+        }
+
+        return  y * dMPlusOne - dMPlusTwo +  chebCoeffs[0] * 0.5;
+        // return sum;
     }
 
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)
