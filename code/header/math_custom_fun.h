@@ -22,12 +22,17 @@ namespace NextSilicon
         uint32_t taylorDegreeEnd = 7;
     };
 
-    float nextSiliconSineFP32(float x, uint32_t taylorDegreeEnd = 7);
+    // chebyshev_t
+
+    float nextSiliconSineFP32Taylor(float x, uint32_t taylorDegreeEnd = 7);
+
+    float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN = 7);
 
     enum class FunctionVersion
     {
         TAYLOR_C_ORIGINAL,
         TAYLOR_CPP_OPTIMIZED,
+        CHEB_POLY
     };
 
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs = SineArguments{});

@@ -11,7 +11,7 @@ extern "C" {
 namespace NextSilicon
 {
 
-    float nextSiliconSineFP32(float x, uint32_t taylorDegreeEnd)
+    float nextSiliconSineFP32Taylor(float x, uint32_t taylorDegreeEnd)
     {
         using namespace boost::multiprecision;
         static constexpr auto PI_F = std::numbers::pi_v<float>;
@@ -29,7 +29,6 @@ namespace NextSilicon
         }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
-        // std::cout << "X IN range" << xPiRange << std::endl;
 
         if (std::abs(x) > PI_F)
         {
@@ -72,6 +71,44 @@ namespace NextSilicon
         return result;
     }
 
+    static std::vector<float> computeChebyshevPolynomial(float x, uint32_t polyDegree) {
+        std::vector<float> vCoeffs(polyDegree + 1, 0.f);
+
+        if (polyDegree >= 0)
+        {
+            vCoeffs[0] = 1;
+        }
+        if (polyDegree >= 1)
+        {
+            vCoeffs[1] = x;
+        }
+
+        for (uint32_t n = 2u; n <= polyDegree; n++) {
+            vCoeffs[n] = 2 * x * vCoeffs[n-1]  - vCoeffs[n - 2];
+        }
+
+        return vCoeffs;
+    }
+
+    static std::vector<float> computeChebyshevCoefficients(float(*f)(float), uint32_t numCoeffs) {
+        std::vector<float> vCoeffs(numCoeffs, 0.f);
+
+        // TODO: optimizations (cos(pi k...)) and theta
+        for (uint32_t j = 0u; j < numCoeffs; j++) {
+            float sum = 0.f;
+
+            for (uint32_t k = 0u; k < numCoeffs; k++) {
+                float theta = std::numbers::pi_v<float> * (k + 0.5f) / numCoeffs;
+                float leftCos = std::cos(theta);
+                float rightCos = std::cos(theta * j);
+                sum += f(leftCos) * rightCos;
+            }
+            vCoeffs[j] = sum * 2.0f / numCoeffs;
+        }
+
+        return vCoeffs;
+    }
+
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)
     {
         auto sineVal = std::nanf("");
@@ -81,11 +118,35 @@ namespace NextSilicon
                 sineVal = fp32_custom_sine(x);
                 break;
             case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
-                sineVal = nextSiliconSineFP32(x, sineArgs.taylorDegreeEnd);
+                sineVal = nextSiliconSineFP32Taylor(x, sineArgs.taylorDegreeEnd);
                 break;
+            case FunctionVersion::CHEB_POLY:
+                sineVal = nextSiliconSineFP32Chebyshev(x, sineArgs.taylorDegreeEnd);
+                break;
+
         }
 
         return sineVal;
+    }
+
+    float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN)
+    {
+        auto wrappedSine = [](float x) {
+            return nextSiliconSineFP32Taylor(x);
+        };
+        auto chebCoeffs = computeChebyshevCoefficients(wrappedSine, chebDegreeN - 1);
+        auto chebPoly = computeChebyshevPolynomial(x, chebDegreeN - 1);
+
+        // T_0 = 1, so in the formula from the book c_0  - 1/2 c_0 is 1/2 c_0
+        chebCoeffs[0] /= 2.0f;
+
+        float sum = chebCoeffs[0];
+        for (int k = 1; k <= chebDegreeN; k++)
+        {
+            sum += chebCoeffs[k] * chebPoly[k];
+        }
+
+        return sum;
     }
 
 }

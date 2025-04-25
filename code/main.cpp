@@ -10,7 +10,7 @@
 
 std::tuple<float, float, float, float> evalPrecision(float val)
 {
-    auto sinValCustom = NextSilicon::nextSiliconSineFP32(val, 5);
+    auto sinValCustom = NextSilicon::nextSiliconSineFP32Taylor(val, 5);
     auto sinVal = std::sin(val);
     auto absError = std::abs(sinVal - sinValCustom);
     auto relError = absError / sinVal;
