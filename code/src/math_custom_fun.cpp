@@ -25,7 +25,7 @@ namespace NextSilicon
         }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
-        std::cout << "X IN range" << xPiRange << std::endl;
+        // std::cout << "X IN range" << xPiRange << std::endl;
 
         if (std::abs(x) > PI_F)
         {
@@ -51,7 +51,7 @@ namespace NextSilicon
         return result;
     }
 
-    float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion)
+    float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)
     {
         auto sineVal = std::nanf("");
         switch(functionVersion)
@@ -60,7 +60,7 @@ namespace NextSilicon
                 sineVal = fp32_custom_sine(x);
                 break;
             case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
-                sineVal = nextSiliconSineFP32(x, 7);
+                sineVal = nextSiliconSineFP32(x, sineArgs.taylorDegreeEnd);
                 break;
 
         }

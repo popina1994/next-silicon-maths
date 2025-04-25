@@ -17,6 +17,11 @@ namespace NextSilicon
         }
     };
 
+    struct SineArguments
+    {
+        uint32_t taylorDegreeEnd = 7;
+    };
+
     float nextSiliconSineFP32(float x, uint32_t taylorDegreeEnd = 7);
 
     enum class FunctionVersion
@@ -25,7 +30,7 @@ namespace NextSilicon
         TAYLOR_CPP_OPTIMIZED,
     };
 
-    float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion);
+    float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs = SineArguments{});
 }
 
 #endif // FP32_CUSTOM_SINE_H
