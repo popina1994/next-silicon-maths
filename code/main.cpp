@@ -63,9 +63,9 @@ static void testPerformanceRange(float startRange, float endRange, float incRang
             auto sinVal = nextSiliconSineFP32(val, funcVer, sineArgs);
         }
         auto endTime = high_resolution_clock::now();
-        auto elapsedTime = duration_cast<microseconds>(endTime - startTime);
+        auto elapsedTime = duration_cast<nanoseconds>(endTime - startTime);
 
-        fOut << "VAL: " << val << "Time taken: " << elapsedTime.count() << " microseconds" << std::endl;
+        fOut << "VAL: " << val << "Time taken: " << elapsedTime.count() << " nanoseconds" << std::endl;
     }
 }
 

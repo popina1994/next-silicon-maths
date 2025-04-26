@@ -56,17 +56,17 @@ print(df_cheb_poly_15)
 
 # Assuming you have the DataFrame stored as `df`
 plt.plot(df_tay_orig['VAL'], df_tay_orig['REL'], label='Relative Error of Taylor original')
-plt.plot(df_tay_opti_7['VAL'], df_tay_opti_7['REL'], label='Relative Error of Taylor optimized degere 7')
+plt.plot(df_tay_opti_7['VAL'], df_tay_opti_7['REL'], label='Relative Error of Taylor optimized degree 7')
 plt.plot(df_cheb_poly_7['VAL'], df_cheb_poly_7['REL'], label='Relative Error of Chebyshev degree 7')
-plt.plot(df_tay_opti_11['VAL'], df_tay_opti_11['REL'], label='Relative Error of Taylor optimized degere 11')
+plt.plot(df_tay_opti_11['VAL'], df_tay_opti_11['REL'], label='Relative Error of Taylor optimized degree 11')
 plt.plot(df_cheb_poly_11['VAL'], df_cheb_poly_11['REL'], label='Relative Error of Chebyshev degree 11')
-plt.plot(df_tay_opti_15['VAL'], df_tay_opti_15['REL'], label='Relative Error of Taylor optimized degere 15')
+plt.plot(df_tay_opti_15['VAL'], df_tay_opti_15['REL'], label='Relative Error of Taylor optimized degree 15')
 plt.plot(df_cheb_poly_15['VAL'], df_cheb_poly_15['REL'], label='Relative Error of Chebyshev degree 15')
 
 
 plt.xlabel('Value')
 plt.ylabel('Relative Error')
-plt.title('Relative Error vs. Value')
+plt.title('Dependency of the relative error on the value')
 plt.grid(True)
 plt.legend()
 
