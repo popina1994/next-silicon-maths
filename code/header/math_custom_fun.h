@@ -2,7 +2,9 @@
 #define _NEXT_SILICON_MATH_CUSTOM_SINE_H
 
 #include <exception>
+#include <stdexcept>
 #include <cstdint>
+#include <string>
 
 namespace NextSilicon
 {
@@ -17,8 +19,10 @@ namespace NextSilicon
 
     struct SineArguments
     {
-        uint32_t taylorDegreeEnd = 7;
+        uint32_t degreeEnd = 7;
     };
+
+
 
     /**
      * @brief Approximates the sine of a floating-point angle using a Taylor series.
@@ -28,7 +32,7 @@ namespace NextSilicon
      * The input is first reduced to the range [-pi, pi] for better convergence.
      *
      * @param x The angle in radians (single-precision float).
-     * @param taylorDegreeEnd The maximum degree (odd number) to use in the Taylor series expansion.
+     * @param degreeEnd The maximum degree (odd number) to use in the Taylor series expansion.
      *                        Must be ≥ 3 and should be odd for sine approximation.
      * @return float Approximate sine of the input angle.
      *
@@ -36,11 +40,11 @@ namespace NextSilicon
      *
      * @note The function uses precomputed factorials to improve performance and assumes
      *       that the caller provides a valid degree (≥ 3 and odd). Accuracy increases
-     *       with higher `taylorDegreeEnd` but may introduce more FP32 rounding error.
+     *       with higher `degreeEnd` but may introduce more FP32 rounding error.
      *
      * @see std::sinf for comparison with the standard library sine function.
      */
-    float nextSiliconSineFP32Taylor(float x, uint32_t taylorDegreeEnd = 7);
+    float nextSiliconSineFP32Taylor(float x, uint32_t degreeEnd = 7);
 
     /**
      * @brief Approximates the sine function using Chebyshev polynomials and Clenshaw's algorithm.
@@ -73,6 +77,17 @@ namespace NextSilicon
         TAYLOR_CPP_OPTIMIZED,
         CHEB_POLY
     };
+
+    inline std::string funcVersiontoString(const FunctionVersion& version)
+    {
+        switch (version)
+        {
+            case FunctionVersion::TAYLOR_C_ORIGINAL: return "TAYLOR_C_ORIGINAL";
+            case FunctionVersion::TAYLOR_CPP_OPTIMIZED: return "TAYLOR_CPP_OPTIMIZED";
+            case FunctionVersion::CHEB_POLY: return "CHEB_POLY";
+            default: throw std::invalid_argument("Unknown FunctionVersion");
+        }
+    }
 
      /**
      * @brief Dispatches and computes the sine approximation for a given input using a selected method.

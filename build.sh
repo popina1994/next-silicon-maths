@@ -1,3 +1,7 @@
+NEXT_SILICON_ROOT_PATH="$(dirname "$(realpath "$0")")"
+echo $(realpath "$0")
+NEXT_SILICON_RESULTS_PATH=$NEXT_SILICON_ROOT_PATH/results
+
 mkdir -p build
 cd build
 #rm * -rf
@@ -8,6 +12,8 @@ cd build
 #FUZZY_CXX_COMPILER=/usr/bin/afl-g++
 
 # Compiler paramters
+
+echo $NEXT_SILICON_RESULTS_PATH$
 C_COMPILER=/usr/bin/clang
 CXX_COMPILER=/usr/bin/clang++
 AFL_C_COMPILER=/usr/bin/afl-clang
@@ -36,7 +42,8 @@ mkdir -p corpus
 # ./Next-Silicon-Maths-fuzz-main_fuzzy_2  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 # ./Next-Silicon-Maths-fuzz-main_fuzzy_3  -runs=${LIB_FUZZ_NUM_RUNS} -max_len=${LIB_FUZZ_SEED} -seed=$LIB_FUZZ_SEED
 
-./Next-Silicon-Maths
+./Next-Silicon-Maths --output ${NEXT_SILICON_RESULTS_PATH} --accuracy --performance
 # Run afl: still not fully supported
 export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+# Not yet supported:
 #afl-fuzz -i input -o output -- ./Next-Silicon-Maths-afl

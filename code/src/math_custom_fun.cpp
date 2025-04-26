@@ -7,12 +7,14 @@ extern "C" {
 #include <iostream>
 #include <vector>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+
 #include <functional>
 
 namespace NextSilicon
 {
 
-    float nextSiliconSineFP32Taylor(float x, uint32_t taylorDegreeEnd)
+    float nextSiliconSineFP32Taylor(float x, uint32_t degreeEnd)
     {
         using namespace boost::multiprecision;
         static constexpr auto PI_F = std::numbers::pi_v<float>;
@@ -40,18 +42,18 @@ namespace NextSilicon
         auto term = xPiRange;
         const auto xPiRangeSquared = xPiRange * xPiRange;
         auto sign = 1;
-        std::vector<float> vFact(taylorDegreeEnd + 1, 0);
+        std::vector<float> vFact(degreeEnd + 1, 0);
         vFact[1] = 1;
 
         for (auto taylorDegree = TAYLOR_DEGREE_START;
-            taylorDegree <= taylorDegreeEnd;
+            taylorDegree <= degreeEnd;
             taylorDegree += TAYLOR_DEGREE_NEXT_INC)
         {
             vFact[taylorDegree] = vFact[taylorDegree - 2] * (taylorDegree - 1) * taylorDegree;
         }
 
         for (auto taylorDegree = TAYLOR_DEGREE_START;
-            taylorDegree <= taylorDegreeEnd;
+            taylorDegree <= degreeEnd;
             taylorDegree += TAYLOR_DEGREE_NEXT_INC)
         {
             sign = -sign;
@@ -69,6 +71,20 @@ namespace NextSilicon
         }
 
         return result;
+    }
+
+    static float optimizedFModf2Pi(float x)
+    {
+        using namespace boost::multiprecision;
+        using Real = cpp_bin_float_100;
+
+        static const auto TWO_PI_HIGH_PREC = 2 * boost::math::constants::pi<Real>();
+
+        Real xExt = static_cast<Real>(x);
+        auto divider = floor(xExt / TWO_PI_HIGH_PREC);
+        auto remainder = xExt - divider * TWO_PI_HIGH_PREC;
+
+        return static_cast<float>(remainder);
     }
 
     /**
@@ -126,8 +142,8 @@ namespace NextSilicon
     static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs, float a, float b) {
         std::vector<float> vCoeffs(numCoeffs, 0.f);
 
-        float bma = 0.5 * (b - a);
-        float bpa = 0.5 * (b + a);
+        float bma = 0.5f * (b - a);
+        float bpa = 0.5f * (b + a);
         // TODO: optimizations (cos(pi k...)) and theta
         for (uint32_t j = 0u; j < numCoeffs; j++) {
             float sum = 0.f;
@@ -162,7 +178,9 @@ namespace NextSilicon
         {
             return 0.f;
         }
-        auto xPiRange = fmodf(x, TWO_PI_F);
+        // auto xPiRange = fmodf(x, TWO_PI_F);
+        auto xPiRange = optimizedFModf2Pi(x);
+        std::cout << "ADVANCED" << x << " " <<  xPiRange << std::endl;
 
         if (std::abs(x) > PI_F)
         {
@@ -198,10 +216,10 @@ namespace NextSilicon
                 sineVal = fp32_custom_sine(x);
                 break;
             case FunctionVersion::TAYLOR_CPP_OPTIMIZED:
-                sineVal = nextSiliconSineFP32Taylor(x, sineArgs.taylorDegreeEnd);
+                sineVal = nextSiliconSineFP32Taylor(x, sineArgs.degreeEnd);
                 break;
             case FunctionVersion::CHEB_POLY:
-                sineVal = nextSiliconSineFP32Chebyshev(x, sineArgs.taylorDegreeEnd);
+                sineVal = nextSiliconSineFP32Chebyshev(x, sineArgs.degreeEnd);
                 break;
 
         }

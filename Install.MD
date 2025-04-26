@@ -9,9 +9,13 @@ The following subsection contains the list of required libraries and packages ne
     3. boost (at least 1.74.0)
     4. Fuzzy library afl :
         1. sudo apt install afl
+    5. Fuzzy library libFuzzer
 
 # Plotting
 1. python 3 (at least 3.10.12)
 2. all python packages listed in pip requirements.txt
-2.
 ## Reproducibility
+1. Install all required dependencies
+2. Update build.sh: compilers, seeds, uncomment either unit tests, fuzzy tests or the program itself
+3. bash build.sh :)
+4. Update main.cpp for different type of runs of accuracies and plots.

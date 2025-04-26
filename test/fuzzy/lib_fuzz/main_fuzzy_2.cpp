@@ -21,7 +21,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     FuzzedDataProvider fdp(data, size);
     auto value = fdp.ConsumeFloatingPointInRange<float>(-0.0001, 0.0001);
     NextSilicon::SineArguments sineArgs;
-    sineArgs.taylorDegreeEnd = 10;
+    sineArgs.degreeEnd = 10;
     auto sineTayOrig =  NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::TAYLOR_C_ORIGINAL);
     auto sineTayOptimized = NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::TAYLOR_CPP_OPTIMIZED, sineArgs);
     auto sineChebPoly = NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::CHEB_POLY, sineArgs);

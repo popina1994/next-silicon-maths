@@ -51,7 +51,7 @@ TEST(CustomSinTest, ChebPolyPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
         std::numbers::pi_v<float> / 8, std::numbers::pi_v<float> / 16};
 
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 15;
+    sinArgs.degreeEnd = 15;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
@@ -82,7 +82,7 @@ TEST(CustomSinTest, ChebPolyPeriodEdgeCasesMinPiMinDivTwo) {
 
 
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 15;
+    sinArgs.degreeEnd = 15;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
@@ -100,7 +100,7 @@ TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiDivTwoPiDivTwo) {
         std::numbers::pi_v<float> / 8, std::numbers::pi_v<float> / 16};
 
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 11;
+    sinArgs.degreeEnd = 11;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
@@ -127,7 +127,7 @@ TEST(CustomSinTest, TaylorSeriesPeriodEdgeCasesMinPiMinDivTwo) {
     {  std::numbers::pi_v<float> / 16 + -std::numbers::pi_v<float>/2,   -0.98078528f }
     };
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 15;
+    sinArgs.degreeEnd = 15;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
@@ -146,7 +146,7 @@ TEST(CustomSinTest, TaylorSeriesLargeNumbers)
         // std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max()
 
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 11;
+    sinArgs.degreeEnd = 11;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::TAYLOR_CPP_OPTIMIZED, sinArgs);
@@ -170,7 +170,7 @@ TEST(CustomSinTest, ChebPolyLargeNumbers)
     };
     // On different systems different outputs.
     SineArguments sinArgs;
-    sinArgs.taylorDegreeEnd = 15;
+    sinArgs.degreeEnd = 15;
     for (auto val: vVals)
     {
         auto sinOptVal = nextSiliconSineFP32(val, FunctionVersion::CHEB_POLY, sinArgs);
