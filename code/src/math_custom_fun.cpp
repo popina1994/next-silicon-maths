@@ -67,7 +67,6 @@ namespace NextSilicon
             {
                 result -= termAdd;
             }
-
         }
 
         return result;

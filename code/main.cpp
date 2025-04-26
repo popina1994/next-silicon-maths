@@ -69,7 +69,8 @@ static void testPerformanceRange(float startRange, float endRange, float incRang
     }
 }
 
-static void evalTest(bool testPiRange, bool testLargeNumbers,
+static void evalTest(bool testPiRange, bool testLargeNumbers, bool testTwoPiRange,
+    bool testZeroZeroZeroOneRange,
     const FunctionVersion& functVersion, const SineArguments& sineArgs,
     const std::string& outputPath, bool testAccuracy)
 {
@@ -102,6 +103,57 @@ static void evalTest(bool testPiRange, bool testLargeNumbers,
         else
         {
             testPerformanceRange(largeNumStart, largeNumEnd, largeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+
+    }
+
+    if (testTwoPiRange)
+    {
+        float twoPiRangeNumStart = -4 * std::numbers::pi_v<float> - 0.001;
+        float twoPiRangeNumEnd = 4 * std::numbers::pi_v<float> + 0.001;
+        float twoPiRangeNumInc = 0.001f;
+        auto outPathUpdate = outputPath + "two_pi_num_inc";
+        if (testAccuracy)
+        {
+            testAccuracyRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+        else
+        {
+            testPerformanceRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+
+    }
+
+    if (testTwoPiRange)
+    {
+        float twoPiRangeNumStart = -4 * std::numbers::pi_v<float> - 0.001;
+        float twoPiRangeNumEnd = 4 * std::numbers::pi_v<float> + 0.001;
+        float twoPiRangeNumInc = 0.001f;
+        auto outPathUpdate = outputPath + "four_pi_num_inc";
+        if (testAccuracy)
+        {
+            testAccuracyRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+        else
+        {
+            testPerformanceRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+
+    }
+
+    if (testZeroZeroZeroOneRange)
+    {
+        float twoPiRangeNumStart = -0.0001f;
+        float twoPiRangeNumEnd = 0.0001f;
+        float twoPiRangeNumInc = 0.000001f;
+        auto outPathUpdate = outputPath + "zero_zero_zero_one_num_inc";
+        if (testAccuracy)
+        {
+            testAccuracyRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
+        }
+        else
+        {
+            testPerformanceRange(twoPiRangeNumStart, twoPiRangeNumEnd, twoPiRangeNumInc, functVersion, sineArgs, outPathUpdate);
         }
 
     }
@@ -155,13 +207,13 @@ void evalExperiments(bool testAccuracyFlag, bool testPerformanceFlag, const std:
             if (testAccuracyFlag)
             {
                 auto outPathUpdate = outputPath + "/accuracy/" + funcVersiontoString(funVer) + "_" + std::to_string(degreeEnd);
-                evalTest(true, true, funVer, sineArg, outPathUpdate, true);
+                evalTest(true, true, true, true, funVer, sineArg, outPathUpdate, true);
             }
 
             if (testPerformanceFlag)
             {
                 auto outPathUpdate = outputPath + "/performance/" + funcVersiontoString(funVer) + "_" + std::to_string(degreeEnd);
-                evalTest(true, true, funVer, sineArg, outPathUpdate, false);
+                evalTest(true, true, true, true, funVer, sineArg, outPathUpdate, false);
             }
         }
     }

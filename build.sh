@@ -78,6 +78,9 @@ if [ "$RUN_PERF_AND_ACCUR" = true ]; then
     ./Next-Silicon-Maths --output ${NEXT_SILICON_RESULTS_PATH} --accuracy --performance
     cd ..
     python3 scripts/extract_accuracy.py
+    python3 scripts/extract_accuracy_two_pi.py
+    python3 scripts/extract_accuracy_zero_zero_zero.py
+    python3 scripts/extract_performance.py
 fi
 
 

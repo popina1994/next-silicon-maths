@@ -25,32 +25,32 @@ def create_pandas_from_data(path):
 
     return df
 # CHEB_POLY_7pi_inc
-df_tay_orig = create_pandas_from_data('results/accuracy/tay_orig_inc_pi_001.txt')
-df_tay_orig = df_tay_orig[(df_tay_orig['VAL'] > -3.13) & (df_tay_orig['VAL'] < 3.13)]
+df_tay_orig = create_pandas_from_data('results/accuracy/TAYLOR_C_ORIGINAL_7pi_inc.txt')
+# df_tay_orig = df_tay_orig[(df_tay_orig['VAL'] > -3.13) & (df_tay_orig['VAL'] < 3.13)]
 print(df_tay_orig)
 
 df_tay_opti_7 = create_pandas_from_data('results/accuracy/TAYLOR_CPP_OPTIMIZED_7pi_inc.txt')
-df_tay_opti_7 = df_tay_opti_7[(df_tay_opti_7['VAL'] > -3.13) & (df_tay_opti_7['VAL'] < 3.13)]
+# df_tay_opti_7 = df_tay_opti_7[(df_tay_opti_7['VAL'] > -3.13) & (df_tay_opti_7['VAL'] < 3.13)]
 print(df_tay_opti_7)
 
 df_cheb_poly_7 = create_pandas_from_data('results/accuracy/CHEB_POLY_7pi_inc.txt')
-df_cheb_poly_7 = df_cheb_poly_7[(df_cheb_poly_7['VAL'] > -3.13) & (df_cheb_poly_7['VAL'] < 3.13)]
+# df_cheb_poly_7 = df_cheb_poly_7[(df_cheb_poly_7['VAL'] > -3.13) & (df_cheb_poly_7['VAL'] < 3.13)]
 print(df_cheb_poly_7)
 
 df_tay_opti_11 = create_pandas_from_data('results/accuracy/TAYLOR_CPP_OPTIMIZED_11pi_inc.txt')
-df_tay_opti_11 = df_tay_opti_11[(df_tay_opti_11['VAL'] > -3.13) & (df_tay_opti_11['VAL'] < 3.13)]
+# df_tay_opti_11 = df_tay_opti_11[(df_tay_opti_11['VAL'] > -3.13) & (df_tay_opti_11['VAL'] < 3.13)]
 print(df_tay_opti_11)
 
 df_cheb_poly_11 = create_pandas_from_data('results/accuracy/CHEB_POLY_11pi_inc.txt')
-df_cheb_poly_11 = df_cheb_poly_11[(df_cheb_poly_11['VAL'] > -3.13) & (df_cheb_poly_11['VAL'] < 3.13)]
+# df_cheb_poly_11 = df_cheb_poly_11[(df_cheb_poly_11['VAL'] > -3.13) & (df_cheb_poly_11['VAL'] < 3.13)]
 print(df_cheb_poly_11)
 
 df_tay_opti_15 = create_pandas_from_data('results/accuracy/TAYLOR_CPP_OPTIMIZED_15pi_inc.txt')
-df_tay_opti_15 = df_tay_opti_15[(df_tay_opti_15['VAL'] > -3.13) & (df_tay_opti_15['VAL'] < 3.13)]
+# df_tay_opti_15 = df_tay_opti_15[(df_tay_opti_15['VAL'] > -3.13) & (df_tay_opti_15['VAL'] < 3.13)]
 print(df_tay_opti_15)
 
 df_cheb_poly_15 = create_pandas_from_data('results/accuracy/CHEB_POLY_15pi_inc.txt')
-df_cheb_poly_15 = df_cheb_poly_15[(df_cheb_poly_15['VAL'] > -3.13) & (df_cheb_poly_15['VAL'] < 3.13)]
+# df_cheb_poly_15 = df_cheb_poly_15[(df_cheb_poly_15['VAL'] > -3.13) & (df_cheb_poly_15['VAL'] < 3.13)]
 print(df_cheb_poly_15)
 
 
