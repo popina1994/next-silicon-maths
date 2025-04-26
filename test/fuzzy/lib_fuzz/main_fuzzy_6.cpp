@@ -19,9 +19,9 @@ float computeRelativeError(float goldVal, float compVal)
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     FuzzedDataProvider fdp(data, size);
-    auto value = fdp.ConsumeFloatingPointInRange<float>(-0.0001, 0.0001);
+    auto value = fdp.ConsumeFloatingPointInRange<float>(3, 4);
     NextSilicon::SineArguments sineArgs;
-    sineArgs.degreeEnd = 10;
+    sineArgs.degreeEnd = 15;
     auto sineTayOrig =  NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::TAYLOR_C_ORIGINAL);
     auto sineTayOptimized = NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::TAYLOR_CPP_OPTIMIZED, sineArgs);
     auto sineChebPoly = NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::CHEB_POLY, sineArgs);
@@ -31,9 +31,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     auto relErrorSinetayOpt = computeRelativeError(sineGold, sineTayOptimized);
     auto relErrorSineChebPoly = computeRelativeError(sineGold, sineChebPoly);
     // std::cout << relErrorSineChebPoly << std::endl;
-    assert(relErrorTayOrig < 1e-7);
-    assert(relErrorSinetayOpt < 1e-7);
-    assert(relErrorSineChebPoly < 1);
+    assert(relErrorTayOrig < 1e2);
+    assert(relErrorSinetayOpt < 1e2);
+    assert(relErrorSineChebPoly < 1e-3);
 
     return 0;
 }

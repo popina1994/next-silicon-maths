@@ -17,5 +17,4 @@ The following subsection contains the list of required libraries and packages ne
 ## Reproducibility
 1. Install all required dependencies
 2. Update build.sh: compilers, seeds, uncomment either unit tests, fuzzy tests or the program itself
-3. bash build.sh :)
-4. Update main.cpp for different type of runs of accuracies and plots.
+3. from the source project path bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean

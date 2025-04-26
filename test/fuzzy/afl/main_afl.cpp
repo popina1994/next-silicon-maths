@@ -53,7 +53,6 @@ void fuzzTarget(const uint8_t *data, size_t size) {
 
 int main(int argc, char **argv) {
     // AFL will pass input data as stdin
-    std::cout << "WTF" << std::endl;
 
     if (argc > 1) {
         fuzzTarget(reinterpret_cast<uint8_t*>(argv[1]), strlen(argv[1]));

@@ -8,6 +8,7 @@ extern "C" {
 #include <vector>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/math/special_functions/sign.hpp>
 
 #include <functional>
 
@@ -32,10 +33,9 @@ namespace NextSilicon
         }
 
         auto xPiRange = fmodf(x, TWO_PI_F);
-
-        if (std::abs(x) > PI_F)
+        if (std::abs(xPiRange) > PI_F)
         {
-            xPiRange -=  std::signbit(x) * TWO_PI_F;
+            xPiRange -=  boost::math::sign(xPiRange) * TWO_PI_F;
         }
 
         auto result = xPiRange;
@@ -178,17 +178,20 @@ namespace NextSilicon
         {
             return 0.f;
         }
-        // auto xPiRange = fmodf(x, TWO_PI_F);
-        auto xPiRange = optimizedFModf2Pi(x);
+        // auto xPiRangeC = fmodf(x, TWO_PI_F);
 
-        if (std::abs(x) > PI_F)
+        float xPiRange = x;
+        if (std::abs(xPiRange) >= TWO_PI_F)
         {
-            xPiRange -=  std::signbit(x) * TWO_PI_F;
+            xPiRange = optimizedFModf2Pi(xPiRange);
+        }
+        if (std::abs(xPiRange) > PI_F)
+        {
+            xPiRange -=  boost::math::sign(xPiRange) * TWO_PI_F;
         }
 
-        // Adding +0.001 and -0.001 so we move away from the period points.
-        auto b = PI_F + 0.001f;
-        auto a = -PI_F - 0.001f;
+        auto b = PI_F;
+        auto a = -PI_F;
         auto y = (2.0f * xPiRange - a - b) / (b - a);
         auto y2 = 2.f * y;
         auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN, a, b);

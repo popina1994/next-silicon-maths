@@ -10,6 +10,7 @@
 #include <vector>
 #include <boost/program_options.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <chrono>
 
 
 namespace po = boost::program_options;
@@ -46,15 +47,25 @@ static void testAccuracyRange(float startRange, float endRange, float incRange,
 }
 
 static void testPerformanceRange(float startRange, float endRange, float incRange,
-    const FunctionVersion& functVersion,
+    const FunctionVersion& funcVer,
     const SineArguments& sineArgs,
     const std::string& outputPath)
 {
+    using namespace std::chrono;
+    static constexpr auto NUM_RUNS = 1000;
     std::ofstream fOut(outputPath + ".txt");
     std::cout << "Running performance experiments:" << outputPath << std::endl;
     for (auto val = startRange; val <= endRange; val += incRange)
     {
-        // run multiple times
+        auto startTime = high_resolution_clock::now();
+        for (int idx = 0; idx < NUM_RUNS; idx++)
+        {
+            auto sinVal = nextSiliconSineFP32(val, funcVer, sineArgs);
+        }
+        auto endTime = high_resolution_clock::now();
+        auto elapsedTime = duration_cast<microseconds>(endTime - startTime);
+
+        fOut << "VAL: " << val << "Time taken: " << elapsedTime.count() << " microseconds" << std::endl;
     }
 }
 
@@ -159,7 +170,6 @@ void evalExperiments(bool testAccuracyFlag, bool testPerformanceFlag, const std:
 int main(int argc, char* argv[])
 {
     std::cout << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
-    std::cout << std::setprecision(15) << std::scientific;
 
     bool testAccuracyFlag = true;
     bool testPerformanceFlag = false;
