@@ -9,6 +9,8 @@
 #include <limits>
 #include <vector>
 #include <boost/program_options.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+
 
 namespace po = boost::program_options;
 using namespace NextSilicon;
@@ -17,10 +19,16 @@ std::tuple<float, float, float, float> evalPrecision(float val, const FunctionVe
     const SineArguments& sineArgs)
 {
     auto sinValCustom = nextSiliconSineFP32(val, funcVer, sineArgs);
+    using namespace boost::multiprecision;
+    cpp_bin_float_100 valExt = val;
+
+    // Compute sine with multiprecision
+    // std::cout << "valExt" << valExt << std::endl;
+    // auto sinVal = sin(valExt);
     auto sinVal = std::sin(val);
-    auto absError = std::abs(sinVal - sinValCustom);
-    auto relError = std::abs(absError) / std::abs(sinVal);
-    return {absError, relError, sinValCustom, sinVal};
+    auto absError = abs(sinVal - sinValCustom);
+    auto relError = abs(absError) / abs(sinVal);
+    return {(float)absError, (float)relError, sinValCustom, (float)sinVal};
 }
 
 static void testAccuracyRange(float startRange, float endRange, float incRange,
@@ -29,7 +37,7 @@ static void testAccuracyRange(float startRange, float endRange, float incRange,
     const std::string& outputPath)
 {
     std::ofstream fOut(outputPath + ".txt");
-    std::cout << "HERE" << outputPath << std::endl;
+    std::cout << "Running accuracy experiments:" << outputPath << std::endl;
     for (auto val = startRange; val <= endRange; val += incRange)
     {
         auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val, functVersion, sineArgs);
@@ -43,7 +51,7 @@ static void testPerformanceRange(float startRange, float endRange, float incRang
     const std::string& outputPath)
 {
     std::ofstream fOut(outputPath + ".txt");
-    std::cout << "HERE" << outputPath << std::endl;
+    std::cout << "Running performance experiments:" << outputPath << std::endl;
     for (auto val = startRange; val <= endRange; val += incRange)
     {
         // run multiple times
@@ -88,28 +96,6 @@ static void evalTest(bool testPiRange, bool testLargeNumbers,
     }
 }
 
-static void testPerformance(bool testPiRange, bool testLargeNumbers,
-    const FunctionVersion& functVersion, const SineArguments& sineArgs,
-    const std::string& outputPath)
-{
-    if (testPiRange)
-    {
-        float piRangeNumStart = -std::numbers::pi_v<float>;
-        float piRangeNumEnd = std::numbers::pi_v<float>;
-        float piRangeNumInc = 0.001f;
-        auto outPathUpdate = outputPath + "pi_inc";
-        testPerformanceRange(piRangeNumStart, piRangeNumEnd, piRangeNumInc, functVersion, sineArgs, outPathUpdate);
-    }
-
-    if (testLargeNumbers)
-    {
-        float largeNumStart = 1e14f * std::numbers::pi_v<float>;
-        float largeNumEnd = 1e15f * std::numbers::pi_v<float>;
-        float largeNumInc = 1e14f;
-        auto outPathUpdate = outputPath + "large_num_inc";
-        testPerformanceRange(largeNumStart, largeNumEnd, largeNumInc, functVersion, sineArgs, outPathUpdate);
-    }
-}
 
 void parseArgs(int argc, char* argv[], bool& testAccuracyFlag, bool& testPerformanceFlag, std::string& outputPath)
 {

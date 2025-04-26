@@ -180,7 +180,6 @@ namespace NextSilicon
         }
         // auto xPiRange = fmodf(x, TWO_PI_F);
         auto xPiRange = optimizedFModf2Pi(x);
-        std::cout << "ADVANCED" << x << " " <<  xPiRange << std::endl;
 
         if (std::abs(x) > PI_F)
         {
