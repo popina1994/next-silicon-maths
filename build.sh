@@ -1,4 +1,5 @@
 #!/bin/bash
+# Automatically return error in the case if any of the command fails.
 set -e
 
 NEXT_SILICON_ROOT_PATH="$(dirname "$(realpath "$0")")"
