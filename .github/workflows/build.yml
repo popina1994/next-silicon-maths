@@ -34,7 +34,7 @@ jobs:
       run: bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: artifact-results
         path: results/
