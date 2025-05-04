@@ -165,9 +165,9 @@ namespace NextSilicon
     {
         static constexpr auto PI_F = std::numbers::pi_v<float>;
         static constexpr auto TWO_PI_F = 2 * PI_F;
-        auto wrappedSine = [&chebDegreeN](float x) {
-            return nextSiliconSineFP32Taylor(x, chebDegreeN);
-        };
+        // auto wrappedSine = [&chebDegreeN](float x) {
+        //     return nextSiliconSineFP32Taylor(x, chebDegreeN);
+        // };
 
         if (std::isnan(x))
         {
@@ -205,7 +205,7 @@ namespace NextSilicon
             dMPlusOne = bCurr;
         }
 
-        return  y * dMPlusOne - dMPlusTwo +  chebCoeffs[0] * 0.5;
+        return  y * dMPlusOne - dMPlusTwo +  chebCoeffs[0] * 0.5f;
     }
 
     float nextSiliconSineFP32(float x, const FunctionVersion& functionVersion, const SineArguments& sineArgs)

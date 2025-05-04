@@ -19,7 +19,7 @@ float computeRelativeError(float goldVal, float compVal)
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     FuzzedDataProvider fdp(data, size);
-    auto value = fdp.ConsumeFloatingPointInRange<float>(6, 7);
+    auto value = fdp.ConsumeFloatingPointInRange<float>(6.f, 7.f);
     NextSilicon::SineArguments sineArgs;
     sineArgs.degreeEnd = 15;
     auto sineTayOrig =  NextSilicon::nextSiliconSineFP32(value, NextSilicon::FunctionVersion::TAYLOR_C_ORIGINAL);
