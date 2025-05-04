@@ -26,4 +26,4 @@ jobs:
       run: chmod +x ./build.sh
 
     - name: Run build script
-      run: bash build.sh  --enable-unit-tests --clean
+      run: bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean
