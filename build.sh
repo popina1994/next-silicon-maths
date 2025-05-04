@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 NEXT_SILICON_ROOT_PATH="$(dirname "$(realpath "$0")")"
 echo $(realpath "$0")
 NEXT_SILICON_RESULTS_PATH=$NEXT_SILICON_ROOT_PATH/results
