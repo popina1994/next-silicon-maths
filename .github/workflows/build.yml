@@ -25,5 +25,8 @@ jobs:
     - name: Make build.sh executable
       run: chmod +x ./build.sh
 
+    - name: Install python packages
+      run: pip install pandas matplotlib
+
     - name: Run build script
       run: bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean

@@ -1,7 +1,7 @@
 
 # Instructions to use
 
-[Installation instructions](Install.md)
+[Installation instructions](Install.MD)
 
 ## Build information
 
