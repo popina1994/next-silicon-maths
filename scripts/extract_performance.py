@@ -71,9 +71,9 @@ plt.grid(True)
 plt.legend()
 
 # Show the plot
-plt.show()
 plt.yscale('log')
 plt.savefig('plots/performance/inc_rel_pi_001.pdf', format="pdf")
+plt.show()
 plt.figure()
 # plt.plot(df_tay_orig['VAL'], df_tay_orig['TimeTaken_ns'], label='1000 runs of Taylor original')
 # plt.plot(df_tay_opti_7['VAL'], df_tay_opti_7['TimeTaken_ns'], label='1000 runs of Taylor optimized degree 7')
@@ -112,8 +112,8 @@ plt.grid(True)
 plt.legend()
 
 # Show the plot
-plt.show()
 plt.yscale('log')
 plt.savefig('plots/performance/inc_rel_pi_tay_orig_vs_opt.pdf', format="pdf")
+plt.show()
 
 #
