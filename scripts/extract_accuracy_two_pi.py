@@ -64,9 +64,9 @@ plt.grid(True)
 plt.legend()
 
 # Show the plot
-plt.show()
 plt.yscale('log')
 plt.savefig('plots/accuracy/num_rel_two_pi_001.pdf', format="pdf")
+plt.show()
 
 
 plt.figure()
@@ -86,7 +86,7 @@ plt.grid(True)
 plt.legend()
 
 # Show the plot
-plt.show()
 plt.yscale('log')
 #plt.xlim(-3.14 + 0.01, 3.14 - 0.01)
 plt.savefig('plots/accuracy/num_abs_two_pi_001.pdf', format="pdf")
+plt.show()

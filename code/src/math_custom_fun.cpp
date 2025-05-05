@@ -10,8 +10,6 @@ extern "C" {
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/special_functions/sign.hpp>
 
-#include <functional>
-
 namespace NextSilicon
 {
 
@@ -119,48 +117,6 @@ namespace NextSilicon
         return vCoeffs;
     }
 
-    /**
-     * @brief Computes Chebyshev polynomial approximation coefficients for a given function.
-     *
-     * This function calculates the Chebyshev coefficients for approximating a given function @p f
-     * over the interval [a, b] using the Chebyshev polynomials of the first kind.
-     *
-     * @param f The function to approximate, passed as a std::function<float(float)>.
-     * @param numCoeffs The number of Chebyshev coefficients to compute.
-     * @param a The lower bound of the approximation interval.
-     * @param b The upper bound of the approximation interval.
-     * @return std::vector<float> A vector of Chebyshev coefficients of size @p numCoeffs
-     *
-     * @note The function evaluates @p f at Chebyshev nodes and computes the coefficients using
-     *       the discrete orthogonality of Chebyshev polynomials.
-     * @note time complexity O(numCoeffs^2), space complexity O(numCoeffs)
-     * @todo Optimize cosine term computations by precomputing angles or using recurrence.
-     *
-     * @see https://en.wikipedia.org/wiki/Chebyshev_polynomials for more details on Chebyshev approximation.
-     */
-    static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs, float a, float b) {
-        std::vector<float> vCoeffs(numCoeffs, 0.f);
-
-        float bma = 0.5f * (b - a);
-        float bpa = 0.5f * (b + a);
-        // TODO: optimizations (cos(pi k...)) and theta
-        for (uint32_t j = 0u; j < numCoeffs; j++) {
-            float sum = 0.f;
-
-            for (uint32_t k = 0u; k < numCoeffs; k++) {
-                float leftTheta = std::numbers::pi_v<float> * (k + 0.5f) / numCoeffs;
-                float rightTheta = leftTheta * j;
-                float leftCos = std::cos(leftTheta);
-                float rightCos = std::cos(rightTheta);
-                sum += f(leftCos * bma + bpa) * rightCos;
-            }
-            vCoeffs[j] = sum * 2.0f / numCoeffs;
-        }
-
-        return vCoeffs;
-    }
-
-
     float nextSiliconSineFP32Chebyshev(float x, uint32_t chebDegreeN)
     {
         static constexpr auto PI_F = std::numbers::pi_v<float>;
@@ -193,7 +149,16 @@ namespace NextSilicon
         auto a = -PI_F;
         auto y = (2.0f * xPiRange - a - b) / (b - a);
         auto y2 = 2.f * y;
-        auto chebCoeffs = computeChebyshevCoefficients(::sinf, chebDegreeN, a, b);
+        std::vector<float> chebCoeffs;
+
+        if (chebDegreeN < ChebyPolyCoeffs::MAX_POLY_DEGREE)
+        {
+            chebCoeffs = ChebyPolyCoeffs::vvChebPoly[chebDegreeN];
+        }
+        else
+        {
+            chebCoeffs = ChebyPolyCoeffs::computeChebyshevCoefficients(static_cast<double(*)(double)>(std::sin), chebDegreeN, a, b);
+        }
 
         float dMPlusTwo = 0.f;
         float dMPlusOne = 0.f;
