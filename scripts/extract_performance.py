@@ -91,9 +91,9 @@ plt.grid(True)
 plt.legend()
 
 # Show the plot
-plt.show()
 plt.yscale('log')
 plt.savefig('plots/performance/inc_rel_pi_tay_vs_cheb.pdf', format="pdf")
+plt.show()
 
 plt.figure()
 plt.plot(df_tay_orig['VAL'], df_tay_orig['TimeTaken_ns'], label='1000 runs of Taylor original')
