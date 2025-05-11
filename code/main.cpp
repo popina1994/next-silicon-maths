@@ -109,8 +109,8 @@ static void evalTest(bool testPiRange, bool testLargeNumbers, bool testTwoPiRang
 
     if (testTwoPiRange)
     {
-        float twoPiRangeNumStart = -4 * std::numbers::pi_v<float> - 0.001;
-        float twoPiRangeNumEnd = 4 * std::numbers::pi_v<float> + 0.001;
+        float twoPiRangeNumStart = -2 * std::numbers::pi_v<float> - 0.001;
+        float twoPiRangeNumEnd = 2 * std::numbers::pi_v<float> + 0.001;
         float twoPiRangeNumInc = 0.001f;
         auto outPathUpdate = outputPath + "two_pi_num_inc";
         if (testAccuracy)

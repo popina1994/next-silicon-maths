@@ -31,7 +31,7 @@ jobs:
 
 
     - name: Run build script
-      run: bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean
+      run: bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-perf-tests --enable-accur-tests --clean
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

@@ -6,6 +6,8 @@ NEXT_SILICON_ROOT_PATH="$(dirname "$(realpath "$0")")"
 echo $(realpath "$0")
 NEXT_SILICON_RESULTS_PATH=$NEXT_SILICON_ROOT_PATH/results
 RUN_PERF_AND_ACCUR=false
+RUN_PERF=false
+RUN_ACCUR=false
 RUN_FUZZY_TEST=false
 RUN_UNIT_TESTS=false
 CLEAN_EVERYTHING=false
@@ -23,8 +25,12 @@ for arg in "$@"; do
             RUN_FUZZY_TEST=true
             shift
             ;;
-        --enable-pef-accur-tests)
-            RUN_PERF_AND_ACCUR=true
+        --enable-accur-tests)
+            RUN_ACCUR=true
+            shift
+            ;;
+        --enable-perf-tests)
+            RUN_PERF=true
             shift
             ;;
         --clean)
@@ -78,15 +84,22 @@ if [ "$RUN_FUZZY_TEST" = true ]; then
     done
 fi
 
-if [ "$RUN_PERF_AND_ACCUR" = true ]; then
-    ./Next-Silicon-Maths --output ${NEXT_SILICON_RESULTS_PATH} --accuracy --performance
-    cd ..
+if [ "$RUN_PERF" = true ]; then
+    ./Next-Silicon-Maths --output ${NEXT_SILICON_RESULTS_PATH} --performance
+fi
+if [ "$RUN_ACCUR" = true ]; then
+    ./Next-Silicon-Maths --output ${NEXT_SILICON_RESULTS_PATH} --accuracy
+fi
+cd ..
+
+if [ "$RUN_PERF" = true ]; then
+    python3 scripts/extract_performance.py
+fi
+if [ "$RUN_ACCUR" = true ]; then
     python3 scripts/extract_accuracy.py
     python3 scripts/extract_accuracy_two_pi.py
     python3 scripts/extract_accuracy_zero_zero_zero.py
-    python3 scripts/extract_performance.py
 fi
-
 
 # Run afl: still not fully supported!!!
 export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1

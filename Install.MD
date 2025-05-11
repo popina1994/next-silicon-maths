@@ -17,4 +17,4 @@ The following subsection contains the list of required libraries and packages ne
 ## Reproducibility
 1. Install all required dependencies
 2. Update build.sh: compilers, seeds, uncomment either unit tests, fuzzy tests or the program itself
-3. from the source project path bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-pef-accur-tests --clean
+3. from the source project path bash build.sh  --enable-unit-tests --enable-fuzzy-tests --enable-perf-tests --enable-accur-tests --clean
