@@ -33,6 +33,7 @@ static void testAccuracyRange(float startRange, float endRange, float incRange,
 {
     std::ofstream fOut(outputPath + ".txt");
     std::cout << "Running accuracy experiments:" << outputPath << std::endl;
+    fOut << std::setprecision(std::numeric_limits<float>::digits10 ) << std::scientific;
     for (auto val = startRange; val <= endRange; val += incRange)
     {
         auto [absError, relError, sinVal, sinValCustom] = evalPrecision(val, functVersion, sineArgs);
@@ -103,8 +104,8 @@ static void evalTest(bool testPiRange, bool testLargeNumbers, bool testTwoPiRang
 
     if (testTwoPiRange)
     {
-        float twoPiRangeNumStart = -2 * std::numbers::pi_v<float> - 0.001;
-        float twoPiRangeNumEnd = 2 * std::numbers::pi_v<float> + 0.001;
+        float twoPiRangeNumStart = -2 * std::numbers::pi_v<float>;
+        float twoPiRangeNumEnd = 2 * std::numbers::pi_v<float>;
         float twoPiRangeNumInc = 0.001f;
         auto outPathUpdate = outputPath + "two_pi_num_inc";
         if (testAccuracy)
@@ -120,8 +121,8 @@ static void evalTest(bool testPiRange, bool testLargeNumbers, bool testTwoPiRang
 
     if (testTwoPiRange)
     {
-        float twoPiRangeNumStart = -4 * std::numbers::pi_v<float> - 0.001;
-        float twoPiRangeNumEnd = 4 * std::numbers::pi_v<float> + 0.001;
+        float twoPiRangeNumStart = -4 * std::numbers::pi_v<float>;
+        float twoPiRangeNumEnd = 4 * std::numbers::pi_v<float>;
         float twoPiRangeNumInc = 0.001f;
         auto outPathUpdate = outputPath + "four_pi_num_inc";
         if (testAccuracy)
