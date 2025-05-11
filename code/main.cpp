@@ -20,13 +20,7 @@ std::tuple<float, float, float, float> evalPrecision(float val, const FunctionVe
     const SineArguments& sineArgs)
 {
     auto sinValCustom = nextSiliconSineFP32(val, funcVer, sineArgs);
-    using namespace boost::multiprecision;
-    cpp_bin_float_100 valExt = val;
-
-    // Compute sine with multiprecision
-    // std::cout << "valExt" << valExt << std::endl;
-    // auto sinVal = sin(valExt);
-    auto sinVal = std::sin(val);
+    auto sinVal = ::sinf(val);
     auto absError = abs(sinVal - sinValCustom);
     auto relError = abs(absError) / abs(sinVal);
     return {(float)absError, (float)relError, sinValCustom, (float)sinVal};

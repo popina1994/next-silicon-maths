@@ -48,19 +48,19 @@ namespace NextSilicon
          *
          * @see https://en.wikipedia.org/wiki/Chebyshev_polynomials for more details on Chebyshev approximation.
          */
-        static std::vector<float> computeChebyshevCoefficients(std::function<double(double)> f, uint32_t numCoeffs, float a, float b) {
+        static std::vector<float> computeChebyshevCoefficients(std::function<float(float)> f, uint32_t numCoeffs, float a, float b) {
             std::vector<float> vCoeffs(numCoeffs, 0.f);
 
-            double bma = 0.5f * (b - a);
-            double bpa = 0.5f * (b + a);
+            float bma = 0.5f * (b - a);
+            float bpa = 0.5f * (b + a);
             for (uint32_t j = 0u; j < numCoeffs; j++) {
-                double sum = 0.f;
+                float sum = 0.f;
 
                 for (uint32_t k = 0u; k < numCoeffs; k++) {
-                    double leftTheta = std::numbers::pi_v<double> * (k + 0.5f) / numCoeffs;
-                    double rightTheta = leftTheta * j;
-                    double leftCos = std::cos(leftTheta);
-                    double rightCos = std::cos(rightTheta);
+                    float leftTheta = std::numbers::pi_v<float> * (k + 0.5f) / numCoeffs;
+                    float rightTheta = leftTheta * j;
+                    float leftCos = ::cosf(leftTheta);
+                    float rightCos = ::cosf(rightTheta);
                     sum += f(leftCos * bma + bpa) * rightCos;
                 }
                 vCoeffs[j] = sum * 2.0f / numCoeffs;
@@ -73,7 +73,7 @@ namespace NextSilicon
          * @brief Precomputes Chebyshev polynomial coefficients for the sine function over the interval [-pi, pi].
          *
          * This function iteratively computes Chebyshev coefficients for polynomial degrees from 2 up to
-         * MAX_POLY_DEGREE - 1. It uses the sine function (std::sin) as the target function to approximate,
+         * MAX_POLY_DEGREE - 1. It uses the sine function (::sinf) as the target function to approximate,
          * and stores the resulting coefficients in a fixed-size 2D array.
          *
          * @return ChebCoefType A 2D array containing Chebyshev coefficients for each polynomial degree.
@@ -83,12 +83,12 @@ namespace NextSilicon
         {
             ChebyPolyCoeffs::ChebCoefType result(MAX_POLY_DEGREE);
             constexpr auto PI_F = std::numbers::pi_v<float>;
-            constexpr auto a = -PI_F;
-            constexpr auto b = PI_F;
+            constexpr auto a = -0.0001f;
+            constexpr auto b = 0.0001f;
 
             for (uint32_t numCoeffs = 2; numCoeffs < MAX_POLY_DEGREE; numCoeffs++)
             {
-                result[numCoeffs] = computeChebyshevCoefficients(static_cast<double(*)(double)>(std::sin), numCoeffs, a, b);
+                result[numCoeffs] = computeChebyshevCoefficients(static_cast<float(*)(float)>(::sinf), numCoeffs, a, b);
             }
 
             return result;

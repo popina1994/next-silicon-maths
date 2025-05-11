@@ -33,7 +33,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     // std::cout << relErrorSineChebPoly << std::endl;
     assert(relErrorTayOrig < 1e2);
     assert(relErrorSinetayOpt < 1e2);
-    assert(relErrorSineChebPoly < 1e-3);
+    assert(relErrorSineChebPoly < 1e-4);
 
     return 0;
 }

@@ -30,9 +30,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     auto relErrorTayOrig = computeRelativeError(sineGold, sineTayOrig);
     auto relErrorSinetayOpt = computeRelativeError(sineGold, sineTayOptimized);
     auto relErrorSineChebPoly = computeRelativeError(sineGold, sineChebPoly);
-    assert(relErrorTayOrig < 1e-4);
-    assert(relErrorSinetayOpt < 1e-4);
-    assert(relErrorSineChebPoly < 1e-4);
+    assert(relErrorTayOrig < 1e-5);
+    assert(relErrorSinetayOpt < 1e-5);
+    assert(relErrorSineChebPoly < 1e-6);
 
     return 0;
 }

@@ -98,6 +98,7 @@ fi
 if [ "$RUN_ACCUR" = true ]; then
     python3 scripts/extract_accuracy.py
     python3 scripts/extract_accuracy_two_pi.py
+    python3 scripts/extract_accuracy_four_pi.py
     python3 scripts/extract_accuracy_zero_zero_zero.py
 fi
 

@@ -121,9 +121,6 @@ namespace NextSilicon
     {
         static constexpr auto PI_F = std::numbers::pi_v<float>;
         static constexpr auto TWO_PI_F = 2 * PI_F;
-        // auto wrappedSine = [&chebDegreeN](float x) {
-        //     return nextSiliconSineFP32Taylor(x, chebDegreeN);
-        // };
 
         if (std::isnan(x))
         {
@@ -145,20 +142,14 @@ namespace NextSilicon
             xPiRange -=  boost::math::sign(xPiRange) * TWO_PI_F;
         }
 
-        auto b = PI_F;
-        auto a = -PI_F;
+        static constexpr auto epsilonFloat = std::numeric_limits<float>::epsilon();
+        auto b = xPiRange + xPiRange * (1e3 * epsilonFloat);
+        auto a = xPiRange - xPiRange * (1e3 * epsilonFloat);
         auto y = (2.0f * xPiRange - a - b) / (b - a);
         auto y2 = 2.f * y;
         std::vector<float> chebCoeffs;
 
-        if (chebDegreeN < ChebyPolyCoeffs::MAX_POLY_DEGREE)
-        {
-            chebCoeffs = ChebyPolyCoeffs::vvChebPoly[chebDegreeN];
-        }
-        else
-        {
-            chebCoeffs = ChebyPolyCoeffs::computeChebyshevCoefficients(static_cast<double(*)(double)>(std::sin), chebDegreeN, a, b);
-        }
+        chebCoeffs = ChebyPolyCoeffs::computeChebyshevCoefficients(static_cast<double(*)(double)>(std::sin), chebDegreeN, a, b);
 
         float dMPlusTwo = 0.f;
         float dMPlusOne = 0.f;
