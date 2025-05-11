@@ -60,7 +60,7 @@ AFL_C_COMPILER=/usr/bin/afl-clang
 AFL_CXX_COMPILER=/usr/bin/afl-clang++
 
 # Lib fuzz parameters
-LIB_FUZZ_NUM_RUNS=1000
+LIB_FUZZ_NUM_RUNS=10000
 LIB_FUZZ_MAX_LEN=10
 LIB_FUZZ_SEED=100
 

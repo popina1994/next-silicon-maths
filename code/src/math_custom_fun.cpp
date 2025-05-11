@@ -143,8 +143,8 @@ namespace NextSilicon
         }
 
         static constexpr auto epsilonFloat = std::numeric_limits<float>::epsilon();
-        auto b = xPiRange + xPiRange * (1e3 * epsilonFloat);
-        auto a = xPiRange - xPiRange * (1e3 * epsilonFloat);
+        auto b = xPiRange + xPiRange * (4 * epsilonFloat);
+        auto a = xPiRange - xPiRange * (4 * epsilonFloat);
         auto y = (2.0f * xPiRange - a - b) / (b - a);
         auto y2 = 2.f * y;
         std::vector<float> chebCoeffs;
